@@ -16,7 +16,7 @@ class AddEditToDoViewModel(private val repository: FoodReviewListRepository): Vi
 
     fun start(itemId:Int){
         viewModelScope.launch {
-            repository.allFoodReviewItems.collect{
+            repository.allToDoItems.collect{
                 _FoodReviewItem.value = it[itemId]
             }
         }
@@ -30,7 +30,7 @@ class AddEditToDoViewModel(private val repository: FoodReviewListRepository): Vi
 
     fun deleteFoodReviewItem() {
         viewModelScope.launch {
-            FoodReviewItem.value?.id?.let { repository.deleteFoodReviewItem(it) }
+            FoodReviewItem.value?.id?.let { repository.deleteToDoItem(it) }
         }
     }
 

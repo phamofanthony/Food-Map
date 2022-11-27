@@ -11,7 +11,6 @@ import android.widget.CheckBox
 import android.widget.EditText
 import androidx.activity.viewModels
 import com.example.foodmap.Repository.FoodReviewItem
-import com.example.foodmap.FoodMapListActivity
 import com.example.foodmap.FoodMapApplication
 import com.example.foodmap.Util.DatePickerFragment
 import com.example.foodmap.Util.TimePickerFragment
@@ -48,13 +47,13 @@ class AddEditToDoActivity : AppCompatActivity() {
     }
 
     fun populateNewToDoItem(){
-        toDoItem = ToDoItem(null,"","",0,0)
+        toDoItem = FoodReviewItem(null,"","",0,0)
         updateViewUI()
     }
 
     fun populateExistingToDoItem(id:Int){
         addEditToDoViewModel.start(id)
-        addEditToDoViewModel.toDoItem.observe(this){
+        addEditToDoViewModel.FoodReviewItem.observe(this){
             if(it != null) {
                 toDoItem = it
                 updateViewUI()
@@ -82,7 +81,7 @@ class AddEditToDoActivity : AppCompatActivity() {
             setResult(RESULT_CANCELED)
             finish()
         }else{
-            addEditToDoViewModel.deleteToDoItem()
+            addEditToDoViewModel.deleteFoodReviewItem()
             setResult(RESULT_OK)
             finish()
         }

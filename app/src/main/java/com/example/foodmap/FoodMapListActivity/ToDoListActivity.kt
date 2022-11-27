@@ -45,7 +45,6 @@ class ToDoListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        NotificationUtils().createNotificationChannel(applicationContext)
         setContentView(R.layout.activity_to_do_list)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
@@ -59,7 +58,6 @@ class ToDoListActivity : AppCompatActivity() {
         toDoListViewModel.allToDoItems.observe(this) { todoitems ->
             // Update the cached copy of the words in the adapter.
             todoitems.let {
-                scheduleNotifications(it)
                 adapter.submitList(it.values.toList())
             }
         }
@@ -70,19 +68,4 @@ class ToDoListActivity : AppCompatActivity() {
         }
     }
 
-    private fun scheduleNotifications(toDoItems: Map<Int, FoodReviewItem>?) {
-        val alarmManager = this.applicationContext.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
-        if (toDoItems != null) {
-            for (item in toDoItems.values){
-                val dueDate = item.dueDate
-                if((dueDate != null) && (dueDate > Calendar.getInstance().timeInMillis) && item.id != null){
-                    val alarmIntent = Intent(this.applicationContext,AlarmReceiver::class.java)
-                    alarmIntent.putExtra(AddEditToDoActivity.EXTRA_ID,item.id)
-                    val pendingAlarmIntent = PendingIntent.getBroadcast(this.applicationContext,
-                        item.id!!,alarmIntent,FLAG_IMMUTABLE)
-                    alarmManager?.set(AlarmManager.RTC_WAKEUP,dueDate,pendingAlarmIntent)
-                }
-            }
-        }
-    }
 }
