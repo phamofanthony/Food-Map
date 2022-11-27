@@ -7,7 +7,6 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import om.example.foodmap.Repository.FoodReviewItem
 
 // Annotates class to be a Room Database with a table (entity) of the ToDoItem class
 @Database(entities = arrayOf(FoodReviewItem::class), version = 1, exportSchema = false)

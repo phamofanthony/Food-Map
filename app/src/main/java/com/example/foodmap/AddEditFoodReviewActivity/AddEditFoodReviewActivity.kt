@@ -1,9 +1,8 @@
-package com.example.foodmap.AddEditToDoActivity
+package com.example.foodmap.AddEditFoodReviewActivity
 
 import android.icu.text.DateFormat.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -19,7 +18,7 @@ import com.example.foodmap.R
 
 import java.util.*
 
-class AddEditToDoActivity : AppCompatActivity() {
+class AddEditFoodReviewActivity : AppCompatActivity() {
 
     private lateinit var toDoItem:FoodReviewItem
     private lateinit var etTitle:EditText
@@ -27,8 +26,8 @@ class AddEditToDoActivity : AppCompatActivity() {
     private lateinit var etDate: Button
     private lateinit var checkBox: CheckBox
 
-    private val addEditToDoViewModel: AddEditToDoViewModel by viewModels {
-        AddEditToDoViewModel.AddEditToDoViewModelFactory((application as FoodMapApplication).repository)
+    private val addEditToDoViewModel: AddEditFoodReviewViewModel by viewModels {
+        AddEditFoodReviewViewModel.AddEditToDoViewModelFactory((application as FoodMapApplication).repository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

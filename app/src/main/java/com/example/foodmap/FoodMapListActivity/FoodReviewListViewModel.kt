@@ -6,7 +6,7 @@ import com.example.foodmap.Repository.FoodReviewListRepository
 import kotlinx.coroutines.launch
 
 
-class ToDoListViewModel(private val repository: FoodReviewListRepository): ViewModel() {
+class FoodReviewListViewModel(private val repository: FoodReviewListRepository): ViewModel() {
 
     fun updateChecked(itemId: Int, checked: Boolean) {
         viewModelScope.launch {
@@ -18,13 +18,12 @@ class ToDoListViewModel(private val repository: FoodReviewListRepository): ViewM
 
     class ToDoListViewModelFactory(private val repository: FoodReviewListRepository) : ViewModelProvider.Factory{
         override fun <T: ViewModel> create(modelClass: Class<T>): T{
-            if(modelClass.isAssignableFrom(ToDoListViewModel::class.java)){
+            if(modelClass.isAssignableFrom(FoodReviewListViewModel::class.java)){
                 @Suppress("UNCHECKED_CAST")
-                return ToDoListViewModel(repository) as T
+                return FoodReviewListViewModel(repository) as T
             }
             throw IllegalArgumentException("Unknown ViewModel Class")
         }
     }
-
 
 }

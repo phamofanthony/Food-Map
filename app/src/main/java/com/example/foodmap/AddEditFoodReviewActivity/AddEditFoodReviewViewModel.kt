@@ -1,14 +1,11 @@
-package com.example.foodmap.AddEditToDoActivity
+package com.example.foodmap.AddEditFoodReviewActivity
 
 import androidx.lifecycle.*
 import com.example.foodmap.Repository.FoodReviewItem
 import com.example.foodmap.Repository.FoodReviewListRepository
-import com.example.foodmap.FoodMapListActivity.ToDoListViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.withIndex
 import kotlinx.coroutines.launch
 
-class AddEditToDoViewModel(private val repository: FoodReviewListRepository): ViewModel() {
+class AddEditFoodReviewViewModel(private val repository: FoodReviewListRepository): ViewModel() {
 
     val _FoodReviewItem = MutableLiveData<FoodReviewItem>().apply { value=null }
     val FoodReviewItem:LiveData<FoodReviewItem>
@@ -42,9 +39,9 @@ class AddEditToDoViewModel(private val repository: FoodReviewListRepository): Vi
 
     class AddEditToDoViewModelFactory(private val repository: FoodReviewListRepository) : ViewModelProvider.Factory{
         override fun <T: ViewModel> create(modelClass: Class<T>): T{
-            if(modelClass.isAssignableFrom(AddEditToDoViewModel::class.java)){
+            if(modelClass.isAssignableFrom(AddEditFoodReviewViewModel::class.java)){
                 @Suppress("UNCHECKED_CAST")
-                return AddEditToDoViewModel(repository) as T
+                return AddEditFoodReviewViewModel(repository) as T
             }
             throw IllegalArgumentException("Unknown ViewModel Class")
         }

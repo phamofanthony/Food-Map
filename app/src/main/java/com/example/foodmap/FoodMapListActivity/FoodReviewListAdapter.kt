@@ -15,10 +15,10 @@ import com.example.foodmap.Repository.FoodReviewItem
 import java.util.*
 
 
-class ToDoListAdapter(
+class FoodReviewListAdapter(
     val itemClicked: (itemId: Int) -> Unit,
     val checkBoxClicked: (itemId: Int, isChecked: Boolean) -> Unit
-) : ListAdapter<FoodReviewItem, ToDoListAdapter.ToDoItemViewHolder>(ToDoItemComparator()) {
+) : ListAdapter<FoodReviewItem, FoodReviewListAdapter.ToDoItemViewHolder>(ToDoItemComparator()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoItemViewHolder {

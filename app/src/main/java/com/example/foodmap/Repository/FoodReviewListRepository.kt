@@ -2,7 +2,6 @@ package com.example.foodmap.Repository
 
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.flow.Flow
-import com.example.foodmap.Repository.FoodReviewItem
 
 class FoodReviewListRepository(private val toDoListDao: FoodReviewListDao) {
 

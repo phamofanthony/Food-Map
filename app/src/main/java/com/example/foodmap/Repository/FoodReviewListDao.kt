@@ -2,7 +2,6 @@ package  com.example.foodmap.Repository
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
-import com.example.foodmap.Repository.FoodReviewItem
 
 @Dao
 interface FoodReviewListDao {
