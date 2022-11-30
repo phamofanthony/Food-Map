@@ -3,43 +3,41 @@ package com.example.foodmap.Repository
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.flow.Flow
 
-class FoodReviewListRepository(private val toDoListDao: FoodReviewListDao) {
+class FoodReviewListRepository(private val reviewListDao: FoodReviewListDao) {
 
-
-    val allToDoItems: Flow<Map<Int,FoodReviewItem>> = toDoListDao.getToDoItems()
-
+    val allReviewItems: Flow<Map<Int,FoodReviewItem>> = reviewListDao.getReviewItems()
 
     @Suppress("RedudndantSuspendModifier")
     @WorkerThread
-    suspend fun insert(toDoItem: FoodReviewItem){
-        toDoListDao.insert(toDoItem)
+    suspend fun insert(foodReviewItem: FoodReviewItem){
+        reviewListDao.insert(foodReviewItem)
     }
 
     @Suppress("RedudndantSuspendModifier")
     @WorkerThread
-    suspend fun getToDoItem(toDoId: Int): FoodReviewItem {
-        return toDoListDao.getItem(toDoId)
+    suspend fun getReviewItem(reviewId: Int): FoodReviewItem {
+        return reviewListDao.getItem(reviewId)
     }
 
     @Suppress("RedudndantSuspendModifier")
     @WorkerThread
     suspend fun updateCompleted(toDoId: Int, completed:Boolean) {
         if (completed)
-            toDoListDao.updateCompleted(toDoId,1)
+            reviewListDao.updateCompleted(toDoId,1)
         else
-            toDoListDao.updateCompleted(toDoId,0)
+            reviewListDao.updateCompleted(toDoId,0)
     }
 
     @Suppress("RedudndantSuspendModifier")
     @WorkerThread
-    suspend fun deleteToDoItem(id: Int) {
-        toDoListDao.deleteItem(id)
+    suspend fun deleteReviewItem(id: Int) {
+        reviewListDao.deleteItem(id)
     }
 
     @Suppress("RedudndantSuspendModifier")
     @WorkerThread
-    suspend fun updateItem(toDoItem: FoodReviewItem) {
-        toDoListDao.updateItem(toDoItem)
+    suspend fun updateReviewItem(reviewItem: FoodReviewItem) {
+        reviewListDao.updateItem(reviewItem)
     }
 
 }

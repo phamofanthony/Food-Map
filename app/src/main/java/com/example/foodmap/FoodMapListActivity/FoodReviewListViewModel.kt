@@ -14,7 +14,7 @@ class FoodReviewListViewModel(private val repository: FoodReviewListRepository):
         }
     }
 
-    val allToDoItems: LiveData<Map<Int,FoodReviewItem>> = repository.allToDoItems.asLiveData()
+    val allReviewItems: LiveData<Map<Int,FoodReviewItem>> = repository.allReviewItems.asLiveData()
 
     class ToDoListViewModelFactory(private val repository: FoodReviewListRepository) : ViewModelProvider.Factory{
         override fun <T: ViewModel> create(modelClass: Class<T>): T{

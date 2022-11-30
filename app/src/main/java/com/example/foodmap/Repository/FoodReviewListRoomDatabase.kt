@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 @Database(entities = arrayOf(FoodReviewItem::class), version = 1, exportSchema = false)
 public abstract class FoodReviewListRoomDatabase : RoomDatabase() {
 
-    abstract fun toDoListDao(): FoodReviewListDao
+    abstract fun reviewListDAO(): FoodReviewListDao
 
     companion object {
         // Singleton prevents multiple instances of database opening at the
@@ -32,7 +32,7 @@ public abstract class FoodReviewListRoomDatabase : RoomDatabase() {
                     FoodReviewListRoomDatabase::class.java,
                     "todolist_database"
                 )
-                    .addCallback(ToDoListDatabaseCallback(scope))
+                    .addCallback(FoodReviewListDatabaseCallback(scope))
                     .build()
                 INSTANCE = instance
                 // return instance
@@ -41,7 +41,7 @@ public abstract class FoodReviewListRoomDatabase : RoomDatabase() {
         }
     }
 
-    private class ToDoListDatabaseCallback(
+    private class FoodReviewListDatabaseCallback(
         private val scope: CoroutineScope
     ) : RoomDatabase.Callback() {
 
@@ -49,7 +49,7 @@ public abstract class FoodReviewListRoomDatabase : RoomDatabase() {
             super.onCreate(db)
             INSTANCE?.let { database ->
                 scope.launch {
-                    populateDatabase(database.toDoListDao())
+                    populateDatabase(database.reviewListDAO())
                 }
             }
         }
@@ -59,8 +59,8 @@ public abstract class FoodReviewListRoomDatabase : RoomDatabase() {
             toDoListDao.deleteAll()
 
             // Add sample words.
-            val toDoItem = FoodReviewItem(null, "Assignment 2", "Complete Assignment 2", 0, 0)
-            toDoListDao.insert(toDoItem)
+            val foodReviewItem = FoodReviewItem(null, "Assignment 2",0.0,0.0, "Complete Assignment 2","", 0, 0)
+            toDoListDao.insert(foodReviewItem)
         }
     }
 

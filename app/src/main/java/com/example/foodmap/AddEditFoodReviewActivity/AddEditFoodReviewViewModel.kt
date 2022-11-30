@@ -13,7 +13,7 @@ class AddEditFoodReviewViewModel(private val repository: FoodReviewListRepositor
 
     fun start(itemId:Int){
         viewModelScope.launch {
-            repository.allToDoItems.collect{
+            repository.allReviewItems.collect{
                 _FoodReviewItem.value = it[itemId]
             }
         }
@@ -27,13 +27,13 @@ class AddEditFoodReviewViewModel(private val repository: FoodReviewListRepositor
 
     fun deleteFoodReviewItem() {
         viewModelScope.launch {
-            FoodReviewItem.value?.id?.let { repository.deleteToDoItem(it) }
+            FoodReviewItem.value?.id?.let { repository.deleteReviewItem(it) }
         }
     }
 
     fun updateItem(FoodReviewItem: FoodReviewItem) {
         viewModelScope.launch {
-            repository.updateItem(FoodReviewItem)
+            repository.updateReviewItem(FoodReviewItem)
         }
     }
 

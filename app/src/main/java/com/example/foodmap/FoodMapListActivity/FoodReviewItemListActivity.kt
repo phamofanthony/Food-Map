@@ -48,9 +48,9 @@ class FoodReviewItemListActivity : AppCompatActivity() {
         // Add an observer on the LiveData returned by allToDoItems.
         // The onChanged() method fires when the observed data changes and the activity is
         // in the foreground.
-        toDoListViewModel.allToDoItems.observe(this) { todoitems ->
+        toDoListViewModel.allReviewItems.observe(this) { reviewitem ->
             // Update the cached copy of the words in the adapter.
-            todoitems.let {
+            reviewitem.let {
                 adapter.submitList(it.values.toList())
             }
         }

@@ -7,25 +7,25 @@ import kotlinx.coroutines.flow.Flow
 interface FoodReviewListDao {
 
     @MapInfo(keyColumn = "id")
-    @Query("SELECT * FROM todoitems_table order by id ASC")
-    fun getToDoItems(): Flow<Map<Int, FoodReviewItem>>
+    @Query("SELECT * FROM food_reviews_table order by id ASC")
+    fun getReviewItems(): Flow<Map<Int, FoodReviewItem>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(toDoItem: FoodReviewItem)
+    suspend fun insert(reviewItem: FoodReviewItem)
 
-    @Query("DELETE FROM todoitems_table")
+    @Query("DELETE FROM food_reviews_table")
     suspend fun deleteAll()
 
-    @Query("SELECT * FROM todoitems_table WHERE id = :id")
+    @Query("SELECT * FROM food_reviews_table WHERE id = :id")
     suspend fun getItem(id: Int): FoodReviewItem
 
-    @Query("UPDATE todoitems_table SET completed=:completed WHERE id=:toDoId")
-    suspend fun updateCompleted(toDoId: Int, completed: Int)
+    @Query("UPDATE food_reviews_table SET completed=:completed WHERE id=:reviewID")
+    suspend fun updateCompleted(reviewID: Int, completed: Int)
 
-    @Query("DELETE FROM todoitems_table WHERE id=:id")
+    @Query("DELETE FROM food_reviews_table WHERE id=:id")
     suspend fun deleteItem(id: Int)
 
     @Update
-    suspend fun updateItem(toDoItem: FoodReviewItem)
+    suspend fun updateItem(reviewItem: FoodReviewItem)
 
 }
