@@ -61,4 +61,12 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
     implementation "androidx.lifecycle:lifecycle-common-java8:2.5.1"
+
+
+    //OpenStreetMap Components
+    implementation 'org.osmdroid:osmdroid-android:6.1.14'
+
+    // GEO Dependency
+    implementation 'com.google.android.gms:play-services-location:21.0.0'
+
 }
