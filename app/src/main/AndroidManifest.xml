@@ -41,7 +41,7 @@
         </activity>
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="edu.uark.ahnelson.assignment3solution.fileprovider"
+            android:authorities="com.example.foodmap"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

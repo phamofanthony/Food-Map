@@ -1,4 +1,4 @@
-package edu.uark.ahnelson.assignment3solution.Util
+package com.example.foodmap
 
 import androidx.annotation.IdRes
 import androidx.appcompat.app.ActionBar

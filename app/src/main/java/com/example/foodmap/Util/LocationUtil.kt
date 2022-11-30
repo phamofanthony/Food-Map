@@ -1,7 +1,7 @@
 /**
  * Location UTL used for location events and determines current location on event loop
  */
-package edu.uark.ahnelson.bestlocationever.Util
+package com.example.foodmap
 
 import android.Manifest
 import android.content.Context
