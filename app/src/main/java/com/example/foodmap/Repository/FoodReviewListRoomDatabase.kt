@@ -12,6 +12,8 @@ import kotlinx.coroutines.launch
 @Database(entities = arrayOf(FoodReviewItem::class), version = 1, exportSchema = false)
 public abstract class FoodReviewListRoomDatabase : RoomDatabase() {
 
+    /*
+
     abstract fun reviewListDAO(): FoodReviewListDao
 
     companion object {
@@ -63,5 +65,5 @@ public abstract class FoodReviewListRoomDatabase : RoomDatabase() {
             toDoListDao.insert(foodReviewItem)
         }
     }
-
+    */
 }

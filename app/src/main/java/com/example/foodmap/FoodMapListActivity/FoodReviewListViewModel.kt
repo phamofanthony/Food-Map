@@ -1,20 +1,25 @@
 package com.example.foodmap.FoodMapListActivity
 
 import androidx.lifecycle.*
+import com.example.foodmap.Repository.FirebaseUtil
 import com.example.foodmap.Repository.FoodReviewItem
 import com.example.foodmap.Repository.FoodReviewListRepository
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
 
 
 class FoodReviewListViewModel(private val repository: FoodReviewListRepository): ViewModel() {
 
+    /*
     fun updateChecked(itemId: Int, checked: Boolean) {
         viewModelScope.launch {
             repository.updateCompleted(itemId, checked)
         }
-    }
+    } */
 
-    val allReviewItems: LiveData<Map<Int,FoodReviewItem>> = repository.allReviewItems.asLiveData()
+    var db = FirebaseUtil()
+    var reviewList: Flow<Map<Int,FoodReviewItem>> = db.queryVisibleReviews(currentUserID)
+    val allReviewItems: LiveData<Map<Int,FoodReviewItem>> = reviewList.asLiveData()
 
     class ToDoListViewModelFactory(private val repository: FoodReviewListRepository) : ViewModelProvider.Factory{
         override fun <T: ViewModel> create(modelClass: Class<T>): T{

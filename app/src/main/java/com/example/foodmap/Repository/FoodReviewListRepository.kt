@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 class FoodReviewListRepository(private val reviewListDao: FoodReviewListDao) {
 
+    /*
+
     val allReviewItems: Flow<Map<Int,FoodReviewItem>> = reviewListDao.getReviewItems()
 
     @Suppress("RedudndantSuspendModifier")
@@ -39,5 +41,5 @@ class FoodReviewListRepository(private val reviewListDao: FoodReviewListDao) {
     suspend fun updateReviewItem(reviewItem: FoodReviewItem) {
         reviewListDao.updateItem(reviewItem)
     }
-
+    */
 }

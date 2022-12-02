@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FoodReviewListDao {
 
+    /*
     @MapInfo(keyColumn = "id")
     @Query("SELECT * FROM food_reviews_table order by id ASC")
     fun getReviewItems(): Flow<Map<Int, FoodReviewItem>>
@@ -28,4 +29,5 @@ interface FoodReviewListDao {
     @Update
     suspend fun updateItem(reviewItem: FoodReviewItem)
 
+    */
 }
