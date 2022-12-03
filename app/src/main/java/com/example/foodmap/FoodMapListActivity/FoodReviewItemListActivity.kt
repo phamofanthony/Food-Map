@@ -17,17 +17,32 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class FoodReviewItemListActivity : AppCompatActivity() {
 
-    val startAddEditToDoActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+    private val startAddEditToDoActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             result: ActivityResult ->
         if(result.resultCode== Activity.RESULT_OK){
             Log.d("MainActivity","Completed")
         }
     }
 
+    private val startFriendsActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            result: ActivityResult ->
+        if(result.resultCode== Activity.RESULT_OK){
+            Log.d("MainActivity","Completed")
+        }
+    }
+
+
+    private val startMapsActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            result: ActivityResult ->
+        if(result.resultCode== Activity.RESULT_OK){
+            Log.d("MainActivity","Completed")
+        }
+    }
+
+
     private val toDoListViewModel: FoodReviewListViewModel by viewModels {
         FoodReviewListViewModel.ToDoListViewModelFactory((application as FoodMapApplication).repository)
     }
-
 
     fun recyclerAdapterItemClicked(itemId:Int){
         startAddEditToDoActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java).putExtra(AddEditFoodReviewActivity.EXTRA_ID,itemId))
@@ -55,9 +70,21 @@ class FoodReviewItemListActivity : AppCompatActivity() {
             }
         }
 
-        val fab = findViewById<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener {
+        val addToDoActionBtn = findViewById<FloatingActionButton>(R.id.fab)
+        addToDoActionBtn.setOnClickListener {
             startAddEditToDoActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java))
+        }
+
+        val mapsActionBtn = findViewById<FloatingActionButton>(R.id.mapFloatingActionBtn)
+        mapsActionBtn.setOnClickListener {
+            // TODO: Setup Maps Activity for this to launch to the correct one
+//            startMapsActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java))
+        }
+
+        val friendsActionBtn = findViewById<FloatingActionButton>(R.id.friendsFloatingActionBtn)
+        friendsActionBtn.setOnClickListener {
+            // TODO: Setup Friends Activity for this to launch to the correct one
+//            startFriendsActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java))
         }
     }
 
