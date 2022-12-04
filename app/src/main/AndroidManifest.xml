@@ -39,6 +39,10 @@
             </intent-filter>
 
         </activity>
+        <activity
+            android:name="com.example.foodmap.UserSignUp.UserSignUpActivity"
+            android:exported="true">
+        </activity>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.foodmap"

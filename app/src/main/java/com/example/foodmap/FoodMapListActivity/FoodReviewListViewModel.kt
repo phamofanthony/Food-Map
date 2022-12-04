@@ -1,27 +1,27 @@
 package com.example.foodmap.FoodMapListActivity
 
 import androidx.lifecycle.*
-import com.example.foodmap.Repository.FirebaseUtil
 import com.example.foodmap.Repository.FoodReviewItem
 import com.example.foodmap.Repository.FoodReviewListRepository
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.Flow
 
 
 class FoodReviewListViewModel(private val repository: FoodReviewListRepository): ViewModel() {
 
-    /*
-    fun updateChecked(itemId: Int, checked: Boolean) {
+    val allReviewItems: LiveData<Map<Int,FoodReviewItem>> = repository.allReviewItems.asLiveData()
+
+    fun purgeDB() {
         viewModelScope.launch {
-            repository.updateCompleted(itemId, checked)
+            repository.purgeDB()
         }
-    } */
+    }
+    fun insertItem(foodReview: FoodReviewItem) {
+        viewModelScope.launch {
+            repository.insert(foodReview)
+        }
+    }
 
-    var db = FirebaseUtil()
-    var reviewList: Flow<Map<Int,FoodReviewItem>> = db.queryVisibleReviews(currentUserID)
-    val allReviewItems: LiveData<Map<Int,FoodReviewItem>> = reviewList.asLiveData()
-
-    class ToDoListViewModelFactory(private val repository: FoodReviewListRepository) : ViewModelProvider.Factory{
+    class FoodReviewListViewModelFactory(private val repository: FoodReviewListRepository) : ViewModelProvider.Factory{
         override fun <T: ViewModel> create(modelClass: Class<T>): T{
             if(modelClass.isAssignableFrom(FoodReviewListViewModel::class.java)){
                 @Suppress("UNCHECKED_CAST")

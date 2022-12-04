@@ -14,8 +14,9 @@ import com.example.foodmap.R
 import com.example.foodmap.Repository.FoodReviewItem
 import java.util.*
 
-
+/*
 class FoodReviewListAdapter(
+
     val itemClicked: (itemId: Int) -> Unit,
     val checkBoxClicked: (itemId: Int, isChecked: Boolean) -> Unit
 ) : ListAdapter<FoodReviewItem, FoodReviewListAdapter.ToDoItemViewHolder>(ToDoItemComparator()) {
@@ -107,4 +108,7 @@ class FoodReviewListAdapter(
             return oldItem.id == newItem.id
         }
     }
+
+
 }
+*/

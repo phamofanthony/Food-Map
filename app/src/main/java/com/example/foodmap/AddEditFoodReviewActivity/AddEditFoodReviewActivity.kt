@@ -14,6 +14,7 @@ import com.example.foodmap.FoodMapApplication
 import com.example.foodmap.Util.DatePickerFragment
 import com.example.foodmap.Util.TimePickerFragment
 import com.example.foodmap.R
+import com.example.foodmap.Repository.FirebaseUtil
 
 
 import java.util.*
@@ -26,6 +27,7 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
     private lateinit var etDate: Button
     private lateinit var checkBox: CheckBox
 
+
     private val addEditToDoViewModel: AddEditFoodReviewViewModel by viewModels {
         AddEditFoodReviewViewModel.AddEditToDoViewModelFactory((application as FoodMapApplication).repository)
     }
@@ -33,6 +35,9 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_edit_to_do)
+        var testItem = FoodReviewItem(-1, "anotherEmail@gmail.com", 10.0, 10.0, "Cane's", 1, 5, "Fish", "Mid", "google.com")
+        addEditToDoViewModel.deleteFoodReviewItem()
+        /*
         etTitle = findViewById(R.id.etToDoTitle)
         etContent = findViewById(R.id.etEditContent)
         etDate = findViewById(R.id.editTextDate)
@@ -42,9 +47,9 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
             populateNewreviewItem()
         } else {
             populateExistingreviewItem(id)
-        }
+        } */
     }
-
+    /*
     fun populateNewreviewItem() {
         reviewItem = FoodReviewItem(null, "", 0.0, 0.0, "", "", 0, 0)
         updateViewUI()
@@ -58,10 +63,9 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
                 updateViewUI()
             }
         }
-    }
-
+    } */
+    /*
     fun updateViewUI() {
-
         etTitle.setText(reviewItem.title)
         etContent.setText(reviewItem.content)
         if (reviewItem.dueDate != null) {
@@ -74,8 +78,8 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
             etDate.setText("")
         }
         checkBox.isChecked = reviewItem.completed != 0
-    }
-
+    } */
+    /*
     fun deleteClicked(view: View) {
         Log.d("AddEditDoDoActivity", "Delete Clicked")
         if (reviewItem.id == 0) {
@@ -101,8 +105,8 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
             setResult(RESULT_OK)
             finish()
         }
-    }
-
+    } */
+    /*
     private fun getFieldsIntoItem() {
         reviewItem.title = etTitle.text.toString()
         reviewItem.content = etContent.text.toString()
@@ -113,7 +117,7 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
         } else {
             reviewItem.completed = 0
         }
-    }
+    } */
 
     fun dateSet(calendar: Calendar) {
         TimePickerFragment(calendar, this::timeSet).show(supportFragmentManager, "timePicker")
@@ -132,4 +136,5 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
     companion object {
         val EXTRA_ID = "com.example.foodmap.addedittodoactivity.id"
     }
+
 }

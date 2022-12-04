@@ -11,4 +11,6 @@
     <string name="save_to_do_item">Save To Do Item</string>
     <string name="delete_to_do_item">Delete To Do Item</string>
     <string name="food_map">Food map</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_in">Sign In</string>
 </resources>

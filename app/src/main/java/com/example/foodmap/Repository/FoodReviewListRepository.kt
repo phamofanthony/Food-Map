@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 class FoodReviewListRepository(private val reviewListDao: FoodReviewListDao) {
 
-    /*
+
 
     val allReviewItems: Flow<Map<Int,FoodReviewItem>> = reviewListDao.getReviewItems()
 
@@ -21,14 +21,6 @@ class FoodReviewListRepository(private val reviewListDao: FoodReviewListDao) {
         return reviewListDao.getItem(reviewId)
     }
 
-    @Suppress("RedudndantSuspendModifier")
-    @WorkerThread
-    suspend fun updateCompleted(toDoId: Int, completed:Boolean) {
-        if (completed)
-            reviewListDao.updateCompleted(toDoId,1)
-        else
-            reviewListDao.updateCompleted(toDoId,0)
-    }
 
     @Suppress("RedudndantSuspendModifier")
     @WorkerThread
@@ -41,5 +33,11 @@ class FoodReviewListRepository(private val reviewListDao: FoodReviewListDao) {
     suspend fun updateReviewItem(reviewItem: FoodReviewItem) {
         reviewListDao.updateItem(reviewItem)
     }
-    */
+
+    @Suppress("RedudndantSuspendModifier")
+    @WorkerThread
+    suspend fun purgeDB() {
+        reviewListDao.deleteAll()
+    }
+
 }
