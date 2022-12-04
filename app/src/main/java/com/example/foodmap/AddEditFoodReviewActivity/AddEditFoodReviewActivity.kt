@@ -1,13 +1,14 @@
 package com.example.foodmap.AddEditFoodReviewActivity
 
-import android.icu.text.DateFormat.*
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.RatingBar
 import androidx.activity.viewModels
 import com.example.foodmap.Repository.FoodReviewItem
 import com.example.foodmap.FoodMapApplication
@@ -23,8 +24,13 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
     private lateinit var reviewItem: FoodReviewItem
     private lateinit var etTitle: EditText
     private lateinit var etContent: EditText
-    private lateinit var etDate: Button
-    private lateinit var checkBox: CheckBox
+    private lateinit var etPrice: EditText
+//    private lateinit var ratingBar: RatingBar
+    private lateinit var etReview: EditText
+    lateinit var imageView: ImageView
+
+//    private lateinit var etDate: Button
+//    private lateinit var checkBox: CheckBox
 
     private val addEditToDoViewModel: AddEditFoodReviewViewModel by viewModels {
         AddEditFoodReviewViewModel.AddEditToDoViewModelFactory((application as FoodMapApplication).repository)
@@ -35,8 +41,15 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_edit_to_do)
         etTitle = findViewById(R.id.etToDoTitle)
         etContent = findViewById(R.id.etEditContent)
-        etDate = findViewById(R.id.editTextDate)
-        checkBox = findViewById(R.id.cbMarkComplete)
+        etPrice = findViewById(R.id.etPrice)
+//        ratingBar= findViewById(R.id.ratingBar)
+        etReview = findViewById(R.id.etReviewContent)
+        imageView = findViewById(R.id.imageView)
+
+        val myUri: Uri? = Uri.parse(fileName)
+        imageView.setImageURI(myUri)
+//        etDate = findViewById(R.id.editTextDate)
+//        checkBox = findViewById(R.id.cbMarkComplete)
         val id = intent.getIntExtra(EXTRA_ID, -1)
         if (id == -1) {
             populateNewreviewItem()
@@ -46,7 +59,7 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
     }
 
     fun populateNewreviewItem() {
-        reviewItem = FoodReviewItem(null, "", 0.0, 0.0, "", "", 0, 0)
+        reviewItem = FoodReviewItem(null, "", 0.0, 0.0, "", "", 0, 0, 0.0,0.0f, "")
         updateViewUI()
     }
 
@@ -64,16 +77,19 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
 
         etTitle.setText(reviewItem.title)
         etContent.setText(reviewItem.content)
-        if (reviewItem.dueDate != null) {
-            val cal: Calendar = Calendar.getInstance()
-            cal.timeInMillis = reviewItem.dueDate!!
-            etDate.setText(
-                java.text.DateFormat.getDateTimeInstance(DEFAULT, SHORT).format(cal.timeInMillis)
-            )
-        } else {
-            etDate.setText("")
-        }
-        checkBox.isChecked = reviewItem.completed != 0
+        etPrice.setText(reviewItem.price.toString())
+//        ratingBar.setRating(reviewItem.rating)
+        etReview.setText(reviewItem.review)
+//        if (reviewItem.dueDate != null) {
+//            val cal: Calendar = Calendar.getInstance()
+//            cal.timeInMillis = reviewItem.dueDate!!
+//            etDate.setText(
+//                java.text.DateFormat.getDateTimeInstance(DEFAULT, SHORT).format(cal.timeInMillis)
+//            )
+//        } else {
+//            etDate.setText("")
+//        }
+//        checkBox.isChecked = reviewItem.completed != 0
     }
 
     fun deleteClicked(view: View) {
@@ -106,28 +122,31 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
     private fun getFieldsIntoItem() {
         reviewItem.title = etTitle.text.toString()
         reviewItem.content = etContent.text.toString()
-        reviewItem.dueDate = java.text.DateFormat.getDateTimeInstance(DEFAULT, SHORT)
-            .parse(etDate.text.toString())?.time
-        if (checkBox.isChecked) {
-            reviewItem.completed = 1
-        } else {
-            reviewItem.completed = 0
-        }
+        reviewItem.price = etPrice.text.toString().toDouble()
+//        reviewItem.rating = ratingBar.rating.toFloat()//sera que es toRating()????
+        reviewItem.review = etReview.text.toString()
+//        reviewItem.dueDate = java.text.DateFormat.getDateTimeInstance(DEFAULT, SHORT)
+//            .parse(etDate.text.toString())?.time
+//        if (checkBox.isChecked) {
+//            reviewItem.completed = 1
+//        } else {
+//            reviewItem.completed = 0
+//        }
     }
 
-    fun dateSet(calendar: Calendar) {
-        TimePickerFragment(calendar, this::timeSet).show(supportFragmentManager, "timePicker")
-    }
-
-    fun timeSet(calendar: Calendar) {
-        etDate.setText(
-            java.text.DateFormat.getDateTimeInstance(DEFAULT, SHORT).format(calendar.timeInMillis)
-        )
-    }
-
-    fun dateClicked(view: View) {
-        DatePickerFragment(this::dateSet).show(supportFragmentManager, "datePicker")
-    }
+//    fun dateSet(calendar: Calendar) {
+//        TimePickerFragment(calendar, this::timeSet).show(supportFragmentManager, "timePicker")
+//    }
+//
+//    fun timeSet(calendar: Calendar) {
+//        etDate.setText(
+//            java.text.DateFormat.getDateTimeInstance(DEFAULT, SHORT).format(calendar.timeInMillis)
+//        )
+//    }
+//
+//    fun dateClicked(view: View) {
+//        DatePickerFragment(this::dateSet).show(supportFragmentManager, "datePicker")
+//    }
 
     companion object {
         val EXTRA_ID = "com.example.foodmap.addedittodoactivity.id"

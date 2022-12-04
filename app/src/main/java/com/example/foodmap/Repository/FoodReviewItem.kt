@@ -13,5 +13,8 @@ data class FoodReviewItem(
     @ColumnInfo(name = "title") var title:String,
     @ColumnInfo(name="content") var content:String,
     @ColumnInfo(name="due_date") var dueDate:Long?,
-    @ColumnInfo(name="completed") var completed:Int
+    @ColumnInfo(name="completed") var completed:Int,
+    @ColumnInfo(name = "price") var price: Double?,
+    @ColumnInfo(name = "rating") var rating: Float,
+    @ColumnInfo(name = "review") var review:String
 )

@@ -59,7 +59,7 @@ public abstract class FoodReviewListRoomDatabase : RoomDatabase() {
             toDoListDao.deleteAll()
 
             // Add sample words.
-            val foodReviewItem = FoodReviewItem(null, "Assignment 2",0.0,0.0, "Complete Assignment 2","", 0, 0)
+            val foodReviewItem = FoodReviewItem(null, "Assignment 2",0.0,0.0, "Complete Assignment 2","", 0, 0,0.0,0.0f,"")
             toDoListDao.insert(foodReviewItem)
         }
     }
