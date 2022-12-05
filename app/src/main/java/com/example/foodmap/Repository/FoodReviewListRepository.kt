@@ -19,14 +19,6 @@ class FoodReviewListRepository(private val reviewListDao: FoodReviewListDao) {
         return reviewListDao.getItem(reviewId)
     }
 
-    @Suppress("RedudndantSuspendModifier")
-    @WorkerThread
-    suspend fun updateCompleted(toDoId: Int, completed:Boolean) {
-        if (completed)
-            reviewListDao.updateCompleted(toDoId,1)
-        else
-            reviewListDao.updateCompleted(toDoId,0)
-    }
 
     @Suppress("RedudndantSuspendModifier")
     @WorkerThread
@@ -38,6 +30,12 @@ class FoodReviewListRepository(private val reviewListDao: FoodReviewListDao) {
     @WorkerThread
     suspend fun updateReviewItem(reviewItem: FoodReviewItem) {
         reviewListDao.updateItem(reviewItem)
+    }
+
+    @Suppress("RedudndantSuspendModifier")
+    @WorkerThread
+    suspend fun purgeDB() {
+        reviewListDao.deleteAll()
     }
 
 }

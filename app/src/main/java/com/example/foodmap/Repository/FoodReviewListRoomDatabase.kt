@@ -12,6 +12,8 @@ import kotlinx.coroutines.launch
 @Database(entities = arrayOf(FoodReviewItem::class), version = 1, exportSchema = false)
 public abstract class FoodReviewListRoomDatabase : RoomDatabase() {
 
+
+
     abstract fun reviewListDAO(): FoodReviewListDao
 
     companion object {
@@ -58,9 +60,6 @@ public abstract class FoodReviewListRoomDatabase : RoomDatabase() {
             // Delete all content here.
             toDoListDao.deleteAll()
 
-            // Add sample words.
-            val foodReviewItem = FoodReviewItem(null, "Assignment 2",0.0,0.0, "Complete Assignment 2","", 0, 0)
-            toDoListDao.insert(foodReviewItem)
         }
     }
 
