@@ -16,7 +16,6 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
 
     private lateinit var reviewItem: FoodReviewItem
     private lateinit var etTitle: EditText
-    private lateinit var etOrder: EditText
     private lateinit var etReview: EditText
     private lateinit var etPrice: EditText
 
@@ -36,7 +35,6 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_edit_to_do)
 
         etTitle = findViewById(R.id.etToDoTitle)
-        etOrder = findViewById(R.id.etEditContent)
         etPrice = findViewById(R.id.etPrice)
         ratingBar = findViewById(R.id.ratingBar)
         etReview = findViewById(R.id.etReviewContent)
@@ -64,7 +62,7 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
     fun populateNewFoodReview() {
         reviewItem = FoodReviewItem(
             null, "", 0.0, 0.0, "",
-            1.0, 0.0, "Order...", "Review...", "", "Test User"
+            1.0, 0.0,  "Review...", "", "Test User"
         )
         updateViewUI()
     }
@@ -81,7 +79,6 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
 
     fun updateViewUI() {
         etTitle.setText(reviewItem.restName)
-        etOrder.setText(reviewItem.restItemsOrdered)
         etPrice.setText(reviewItem.restPricing.toString())
         ratingBar.rating = reviewItem.restRating.toFloat()
         etReview.setText(reviewItem.restReview)
@@ -118,7 +115,6 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
         reviewItem.restName = etTitle.text.toString()
         reviewItem.restReview = etReview.text.toString()
         reviewItem.restPricing = etPrice.text.toString().toDouble()
-        reviewItem.restItemsOrdered = etOrder.text.toString()
         reviewItem.restRating = ratingBar.rating.toDouble()
     }
 

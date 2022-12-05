@@ -48,7 +48,6 @@ class FirebaseUtil {
                 "latitude" to foodReview.latitude,
                 "longitude" to foodReview.longitude,
                 "ownerID" to getCurrentUserEmail(),
-                "restItemsOrdered" to foodReview.restItemsOrdered,
                 "restName" to foodReview.restName,
                 "restPictureURL" to foodReview.restPictureURL,
                 "restPricing" to foodReview.restPricing,
