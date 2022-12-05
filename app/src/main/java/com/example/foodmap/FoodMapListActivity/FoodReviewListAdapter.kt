@@ -5,8 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.TextView
+
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,13 +14,11 @@ import com.example.foodmap.R
 import com.example.foodmap.Repository.FoodReviewItem
 import java.util.*
 
-/*
+
 class FoodReviewListAdapter(
 
     val itemClicked: (itemId: Int) -> Unit,
-    val checkBoxClicked: (itemId: Int, isChecked: Boolean) -> Unit
 ) : ListAdapter<FoodReviewItem, FoodReviewListAdapter.ToDoItemViewHolder>(ToDoItemComparator()) {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoItemViewHolder {
         return ToDoItemViewHolder.create(parent)
@@ -28,22 +26,15 @@ class FoodReviewListAdapter(
 
     override fun onBindViewHolder(holder: ToDoItemViewHolder, position: Int) {
         val current = getItem(position)
-        current.id?.let {
+        current.postID?.let {
             holder.bind(
-                it, current.title, current.content,
-                current.completed, current.dueDate, checkBoxClicked
+                current.restName, current.restReview, null
             )
         }
-        holder.itemView.tag = current.id
+        holder.itemView.tag = current.postID
         holder.itemView.setOnClickListener {
             val itemId = it.tag
-            val isClicked = holder.toDoItemCheckbox.isChecked
             Log.d("ToDoListAdapter", "Item Clicked: " + itemId)
-            if (isClicked) {
-                Log.d("ToDoListAdapter", "Item Checked")
-            } else {
-                Log.d("ToDoListAdapter", "Item not clicked")
-            }
             itemClicked(it.tag as Int)
         }
     }
@@ -51,17 +42,13 @@ class FoodReviewListAdapter(
     class ToDoItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val toDoItemTitleView: TextView = itemView.findViewById(R.id.tvTitle)
         private val toDoItemContentView: TextView = itemView.findViewById(R.id.tvContent)
-        val toDoItemCheckbox: CheckBox = itemView.findViewById(R.id.cbCompleted)
         private val toDoItemDueView: TextView = itemView.findViewById(R.id.tvDueDate)
 
 
         fun bind(
-            id: Int,
             title: String?,
             content: String?,
-            completed: Int?,
             dueDate: Long?,
-            checkBoxClicked: (itemId: Int, isChecked: Boolean) -> Unit
         ) {
             toDoItemTitleView.text = title
             toDoItemContentView.text = content
@@ -78,15 +65,6 @@ class FoodReviewListAdapter(
                 } else {
                     toDoItemDueView.text = ""
                 }
-            }
-            if (completed == 0) {
-                toDoItemCheckbox.isChecked = false
-            } else {
-                toDoItemCheckbox.isChecked = true
-            }
-            toDoItemCheckbox.isClickable = true
-            toDoItemCheckbox.setOnClickListener {
-                checkBoxClicked(id, toDoItemCheckbox.isChecked)
             }
         }
 
@@ -105,10 +83,8 @@ class FoodReviewListAdapter(
         }
 
         override fun areContentsTheSame(oldItem: FoodReviewItem, newItem: FoodReviewItem): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.postID == newItem.postID
         }
     }
 
-
 }
-*/

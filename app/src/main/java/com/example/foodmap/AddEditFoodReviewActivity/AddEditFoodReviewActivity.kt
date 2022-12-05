@@ -14,7 +14,6 @@ import com.example.foodmap.FoodMapApplication
 import com.example.foodmap.Util.DatePickerFragment
 import com.example.foodmap.Util.TimePickerFragment
 import com.example.foodmap.R
-import com.example.foodmap.Repository.FirebaseUtil
 
 
 import java.util.*
@@ -29,15 +28,16 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
 
 
     private val addEditToDoViewModel: AddEditFoodReviewViewModel by viewModels {
-        AddEditFoodReviewViewModel.AddEditToDoViewModelFactory((application as FoodMapApplication).repository)
+        AddEditFoodReviewViewModel.AddEditToDoViewModelFactory(
+            (application as FoodMapApplication)
+                .repository
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_edit_to_do)
-        var testItem = FoodReviewItem(-1, "anotherEmail@gmail.com", 10.0, 10.0, "Cane's", 1, 5, "Fish", "Mid", "google.com")
-        addEditToDoViewModel.deleteFoodReviewItem()
-        /*
+
         etTitle = findViewById(R.id.etToDoTitle)
         etContent = findViewById(R.id.etEditContent)
         etDate = findViewById(R.id.editTextDate)
@@ -47,11 +47,14 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
             populateNewreviewItem()
         } else {
             populateExistingreviewItem(id)
-        } */
+        }
     }
-    /*
+
     fun populateNewreviewItem() {
-        reviewItem = FoodReviewItem(null, "", 0.0, 0.0, "", "", 0, 0)
+        reviewItem = FoodReviewItem(
+            null, "", 0.0, 0.0, "",
+            1, 0, "", "", ""
+        )
         updateViewUI()
     }
 
@@ -63,26 +66,17 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
                 updateViewUI()
             }
         }
-    } */
-    /*
+    }
+
     fun updateViewUI() {
-        etTitle.setText(reviewItem.title)
-        etContent.setText(reviewItem.content)
-        if (reviewItem.dueDate != null) {
-            val cal: Calendar = Calendar.getInstance()
-            cal.timeInMillis = reviewItem.dueDate!!
-            etDate.setText(
-                java.text.DateFormat.getDateTimeInstance(DEFAULT, SHORT).format(cal.timeInMillis)
-            )
-        } else {
-            etDate.setText("")
-        }
-        checkBox.isChecked = reviewItem.completed != 0
-    } */
-    /*
+        etTitle.setText(reviewItem.restName)
+        etContent.setText(reviewItem.restReview)
+        etDate.setText("")
+    }
+
     fun deleteClicked(view: View) {
         Log.d("AddEditDoDoActivity", "Delete Clicked")
-        if (reviewItem.id == 0) {
+        if (reviewItem.postID == null) {
             setResult(RESULT_CANCELED)
             finish()
         } else {
@@ -94,7 +88,7 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
 
     fun saveClicked(view: View) {
         Log.d("AddEditToDoActivity", "Save Clicked")
-        if (reviewItem.id == null) {
+        if (reviewItem.postID == null) {
             getFieldsIntoItem()
             addEditToDoViewModel.insert(reviewItem)
             setResult(RESULT_OK)
@@ -105,19 +99,12 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
             setResult(RESULT_OK)
             finish()
         }
-    } */
-    /*
+    }
+
     private fun getFieldsIntoItem() {
-        reviewItem.title = etTitle.text.toString()
-        reviewItem.content = etContent.text.toString()
-        reviewItem.dueDate = java.text.DateFormat.getDateTimeInstance(DEFAULT, SHORT)
-            .parse(etDate.text.toString())?.time
-        if (checkBox.isChecked) {
-            reviewItem.completed = 1
-        } else {
-            reviewItem.completed = 0
-        }
-    } */
+        reviewItem.restName = etTitle.text.toString()
+        reviewItem.restReview = etContent.text.toString()
+    }
 
     fun dateSet(calendar: Calendar) {
         TimePickerFragment(calendar, this::timeSet).show(supportFragmentManager, "timePicker")

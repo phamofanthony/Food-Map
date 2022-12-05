@@ -58,17 +58,15 @@ class FoodReviewItemListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_to_do_list)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-        //val adapter = FoodReviewListAdapter(this::recyclerAdapterItemClicked,this::recyclerAdapterItemCheckboxClicked)
-        //recyclerView.adapter = adapter
+        val adapter = FoodReviewListAdapter(this::recyclerAdapterItemClicked)
+        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Add an observer on the LiveData returned by allToDoItems.
-        // The onChanged() method fires when the observed data changes and the activity is
-        // in the foreground.
+
         foodReviewListViewModel.allReviewItems.observe(this) { reviewitem ->
             // Update the cached copy of the words in the adapter.
             reviewitem.let {
-                //adapter.submitList(it.values.toList())
+                adapter.submitList(it.values.toList())
             }
         }
 
@@ -77,10 +75,11 @@ class FoodReviewItemListActivity : AppCompatActivity() {
             startAddEditToDoActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java))
         }
 
-        if (user1Uuid == "0"){
-            val launchIntent = Intent(this@FoodReviewItemListActivity, UserSignUpActivity::class.java)
-            startUserSignUpActivity.launch(launchIntent)
-        }
+//
+//        if (user1Uuid == "0"){
+//            val launchIntent = Intent(this@FoodReviewItemListActivity, UserSignUpActivity::class.java)
+//            startUserSignUpActivity.launch(launchIntent)
+//        }
 
     }
 
