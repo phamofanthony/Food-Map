@@ -15,5 +15,6 @@ data class FoodReviewItem(
     @ColumnInfo(name = "restPricing") var restPricing: Double,
     @ColumnInfo(name = "restItemsOrdered") var restItemsOrdered: String,
     @ColumnInfo(name = "restReview") var restReview: String,
-    @ColumnInfo(name = "restPictureURL") var restPictureURL: String
-)
+    @ColumnInfo(name = "restPictureURL") var restPictureURL: String,
+    @ColumnInfo(name = "User") var name: String
+    )

@@ -53,10 +53,10 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
 //            populateExistingreviewItem(id)
 //        }
 
-        val id = intent.getIntExtra(EXTRA_ID,-1)
-        if (id == -1){
+        val id = intent.getIntExtra(EXTRA_ID, -1)
+        if (id == -1) {
             populateNewFoodReview()
-        }else{
+        } else {
             populateExistingFoodReview(id)
         }
     }
@@ -64,7 +64,7 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
     fun populateNewFoodReview() {
         reviewItem = FoodReviewItem(
             null, "", 0.0, 0.0, "",
-            1.0, 0.0, "Order...", "Review...", ""
+            1.0, 0.0, "Order...", "Review...", "", "Test User"
         )
         updateViewUI()
     }
