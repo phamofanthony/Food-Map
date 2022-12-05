@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RatingBar
 import android.widget.TextView
 
 import androidx.recyclerview.widget.DiffUtil
@@ -28,7 +29,7 @@ class FoodReviewListAdapter(
         val current = getItem(position)
         current.postID?.let {
             holder.bind(
-                current.restName, current.restReview, null
+                current.restName, current.restPricing.toFloat(), current.name
             )
         }
         holder.itemView.tag = current.postID
@@ -40,32 +41,20 @@ class FoodReviewListAdapter(
     }
 
     class ToDoItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val toDoItemTitleView: TextView = itemView.findViewById(R.id.tvTitle)
-        private val toDoItemContentView: TextView = itemView.findViewById(R.id.tvContent)
-        private val toDoItemDueView: TextView = itemView.findViewById(R.id.tvDueDate)
+        private val reviewResturant: TextView = itemView.findViewById(R.id.tvTitle)
+        private val reviewRating: RatingBar = itemView.findViewById(R.id.restRating)
+        private val reviewUser: TextView = itemView.findViewById(R.id.tvUser)
 
 
         fun bind(
-            title: String?,
-            content: String?,
-            dueDate: Long?,
+            title: String,
+            rating: Float,
+            user: String,
         ) {
-            toDoItemTitleView.text = title
-            toDoItemContentView.text = content
-            if (dueDate != null) {
-                val cal: Calendar = Calendar.getInstance()
-                cal.timeInMillis = dueDate
-                if (cal.timeInMillis > System.currentTimeMillis()) {
-                    toDoItemDueView.setText(
-                        java.text.DateFormat.getDateTimeInstance(
-                            DateFormat.DEFAULT,
-                            DateFormat.SHORT
-                        ).format(cal.timeInMillis)
-                    )
-                } else {
-                    toDoItemDueView.text = ""
-                }
-            }
+            reviewRating.rating = rating
+            reviewResturant.setText(title)
+            reviewUser.setText(user)
+
         }
 
         companion object {

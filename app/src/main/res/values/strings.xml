@@ -21,4 +21,6 @@
     <string name="share_with_friends">Share with Friends</string>
     <string name="open_map">Open Map</string>
     <string name="addtodo">AddToDo</string>
+    <string name="user">User</string>
+    <string name="title">Title</string>
 </resources>
