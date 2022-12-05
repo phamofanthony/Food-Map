@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -91,18 +92,18 @@ class FoodReviewItemListActivity : AppCompatActivity() {
             }
         }
 
-        val addToDoActionBtn = findViewById<FloatingActionButton>(R.id.fab)
+        var addToDoActionBtn = findViewById<ImageButton>(R.id.AddBtn)
         addToDoActionBtn.setOnClickListener {
             startAddEditToDoActivity.launch(Intent(this, AddEditFoodReviewActivity::class.java))
         }
 
-        val mapsActionBtn = findViewById<FloatingActionButton>(R.id.mapFloatingActionBtn)
+        val mapsActionBtn = findViewById<ImageButton>(R.id.mapBtn)
         mapsActionBtn.setOnClickListener {
             // TODO: Setup Maps Activity for this to launch to the correct one
 //            startMapsActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java))
         }
 
-        val friendsActionBtn = findViewById<FloatingActionButton>(R.id.friendsFloatingActionBtn)
+        val friendsActionBtn = findViewById<ImageButton>(R.id.friendsBtn)
         friendsActionBtn.setOnClickListener {
             // TODO: Setup Friends Activity for this to launch to the correct one
 //            startFriendsActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java))
