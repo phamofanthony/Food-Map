@@ -13,52 +13,128 @@ import androidx.activity.viewModels
 import com.example.foodmap.AddEditFoodReviewActivity.AddEditFoodReviewActivity
 import com.example.foodmap.R
 import com.example.foodmap.FoodMapApplication
+import com.example.foodmap.Repository.FirebaseUtil
+import com.example.foodmap.Repository.FoodReviewItem
+import com.example.foodmap.UserSignUp.UserSignUpActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.firestore.ktx.toObject
 
 class FoodReviewItemListActivity : AppCompatActivity() {
 
-    val startAddEditToDoActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-            result: ActivityResult ->
-        if(result.resultCode== Activity.RESULT_OK){
-            Log.d("MainActivity","Completed")
+    private var user1Uuid = "0"
+
+    val startAddEditToDoActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                Log.d("MainActivity", "Completed")
+            }
         }
+
+    private val startFriendsActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                Log.d("MainActivity", "Completed")
+            }
+        }
+
+    val startUserSignUpActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intentData = result.data
+                intentData?.getStringExtra(UserSignUpActivity.USER_UUID)?.let { userData ->
+                    user1Uuid = userData.toString()
+                    Log.d("MainActivity", "SIGNING IN USER $user1Uuid")
+                    Log.d(
+                        "MainActivity",
+                        "Email of current user is " + FirebaseUtil().getCurrentUserEmail()
+                    )
+                    foodReviewListViewModel.purgeDB()
+                    subscribeToRealtimeUpdates()
+                }
+            }
+        }
+
+    private val foodReviewListViewModel: FoodReviewListViewModel by viewModels {
+        FoodReviewListViewModel.FoodReviewListViewModelFactory((application as FoodMapApplication).repository)
     }
 
-    private val toDoListViewModel: FoodReviewListViewModel by viewModels {
-        FoodReviewListViewModel.ToDoListViewModelFactory((application as FoodMapApplication).repository)
+    private val startMapsActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                Log.d("MainActivity", "Completed")
+            }
+        }
+
+    fun recyclerAdapterItemClicked(itemId: Int) {
+        startAddEditToDoActivity.launch(
+            Intent(
+                this,
+                AddEditFoodReviewActivity::class.java
+            ).putExtra(AddEditFoodReviewActivity.EXTRA_ID, itemId)
+        )
     }
 
-
-    fun recyclerAdapterItemClicked(itemId:Int){
-        startAddEditToDoActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java).putExtra(AddEditFoodReviewActivity.EXTRA_ID,itemId))
-    }
-    fun recyclerAdapterItemCheckboxClicked(itemId:Int,isChecked:Boolean){
-        toDoListViewModel.updateChecked(itemId,isChecked)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do_list)
-
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-        val adapter = FoodReviewListAdapter(this::recyclerAdapterItemClicked,this::recyclerAdapterItemCheckboxClicked)
+        val adapter = FoodReviewListAdapter(this::recyclerAdapterItemClicked)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Add an observer on the LiveData returned by allToDoItems.
-        // The onChanged() method fires when the observed data changes and the activity is
-        // in the foreground.
-        toDoListViewModel.allReviewItems.observe(this) { reviewitem ->
+
+        foodReviewListViewModel.allReviewItems.observe(this) { reviewitem ->
             // Update the cached copy of the words in the adapter.
             reviewitem.let {
                 adapter.submitList(it.values.toList())
             }
         }
 
-        val fab = findViewById<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener {
-            startAddEditToDoActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java))
+        val addToDoActionBtn = findViewById<FloatingActionButton>(R.id.fab)
+        addToDoActionBtn.setOnClickListener {
+            startAddEditToDoActivity.launch(Intent(this, AddEditFoodReviewActivity::class.java))
         }
+
+        val mapsActionBtn = findViewById<FloatingActionButton>(R.id.mapFloatingActionBtn)
+        mapsActionBtn.setOnClickListener {
+            // TODO: Setup Maps Activity for this to launch to the correct one
+//            startMapsActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java))
+        }
+
+        val friendsActionBtn = findViewById<FloatingActionButton>(R.id.friendsFloatingActionBtn)
+        friendsActionBtn.setOnClickListener {
+            // TODO: Setup Friends Activity for this to launch to the correct one
+//            startFriendsActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java))
+        }
+
     }
 
+
+    private fun subscribeToRealtimeUpdates() {
+        val db = FirebaseUtil()
+        db.connection.collection("Food Reviews")
+            .whereEqualTo(
+                "ownerID",
+                "CURRENT_USER_EMAIL"
+            ) //Eventually, have call to get currUserEmail + implement following system
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.w("MainActivity", "Listen failed.", e)
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null) {
+                    Log.d("MainActivity", "Current data: ${snapshot.documents}")
+                    for (doc in snapshot.documents) {
+                        val dataToInsert = doc.toObject<FoodReviewItem>()
+                        if (dataToInsert != null) {
+                            foodReviewListViewModel.insertItem(dataToInsert)
+                        }
+                    }
+                } else {
+                    Log.d("MainActivity", "Current data: null")
+                }
+            }
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.foodmap.AddEditFoodReviewActivity
 
 import androidx.lifecycle.*
+import com.example.foodmap.Repository.FirebaseUtil
 import com.example.foodmap.Repository.FoodReviewItem
 import com.example.foodmap.Repository.FoodReviewListRepository
 import kotlinx.coroutines.launch
@@ -12,6 +13,7 @@ class AddEditFoodReviewViewModel(private val repository: FoodReviewListRepositor
         get() = _FoodReviewItem
 
     fun start(itemId:Int){
+
         viewModelScope.launch {
             repository.allReviewItems.collect{
                 _FoodReviewItem.value = it[itemId]
@@ -22,18 +24,24 @@ class AddEditFoodReviewViewModel(private val repository: FoodReviewListRepositor
     fun insert(FoodReviewItem: FoodReviewItem) {
         viewModelScope.launch {
             repository.insert(FoodReviewItem)
+            var db = FirebaseUtil()
+            db.addFoodReview(FoodReviewItem)
         }
     }
 
     fun deleteFoodReviewItem() {
         viewModelScope.launch {
-            FoodReviewItem.value?.id?.let { repository.deleteReviewItem(it) }
+            FoodReviewItem.value?.postID?.let { repository.deleteReviewItem(it) }
+            var db = FirebaseUtil()
+            FoodReviewItem.value?.let{db.deleteFoodReview(it)}
         }
     }
 
     fun updateItem(FoodReviewItem: FoodReviewItem) {
         viewModelScope.launch {
             repository.updateReviewItem(FoodReviewItem)
+            var db = FirebaseUtil()
+            db.modifyFoodReview(FoodReviewItem)
         }
     }
 
@@ -46,4 +54,6 @@ class AddEditFoodReviewViewModel(private val repository: FoodReviewListRepositor
             throw IllegalArgumentException("Unknown ViewModel Class")
         }
     }
+
+
 }

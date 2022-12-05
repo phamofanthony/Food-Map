@@ -8,15 +8,20 @@ import kotlinx.coroutines.launch
 
 class FoodReviewListViewModel(private val repository: FoodReviewListRepository): ViewModel() {
 
-    fun updateChecked(itemId: Int, checked: Boolean) {
+    val allReviewItems: LiveData<Map<Int,FoodReviewItem>> = repository.allReviewItems.asLiveData()
+
+    fun purgeDB() {
         viewModelScope.launch {
-            repository.updateCompleted(itemId, checked)
+            repository.purgeDB()
+        }
+    }
+    fun insertItem(foodReview: FoodReviewItem) {
+        viewModelScope.launch {
+            repository.insert(foodReview)
         }
     }
 
-    val allReviewItems: LiveData<Map<Int,FoodReviewItem>> = repository.allReviewItems.asLiveData()
-
-    class ToDoListViewModelFactory(private val repository: FoodReviewListRepository) : ViewModelProvider.Factory{
+    class FoodReviewListViewModelFactory(private val repository: FoodReviewListRepository) : ViewModelProvider.Factory{
         override fun <T: ViewModel> create(modelClass: Class<T>): T{
             if(modelClass.isAssignableFrom(FoodReviewListViewModel::class.java)){
                 @Suppress("UNCHECKED_CAST")
