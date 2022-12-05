@@ -1,12 +1,12 @@
 package com.example.foodmap.AddEditFoodReviewActivity
 
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.RatingBar
 import androidx.activity.viewModels
 import com.example.foodmap.Repository.FoodReviewItem
 import com.example.foodmap.FoodMapApplication
@@ -16,14 +16,12 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
 
     private lateinit var reviewItem: FoodReviewItem
     private lateinit var etTitle: EditText
-    private lateinit var etContent: EditText
-    private lateinit var etPrice: EditText
-//    private lateinit var ratingBar: RatingBar
+    private lateinit var etOrder: EditText
     private lateinit var etReview: EditText
-    lateinit var imageView: ImageView
+    private lateinit var etPrice: EditText
 
-//    private lateinit var etDate: Button
-//    private lateinit var checkBox: CheckBox
+    private lateinit var ratingBar: RatingBar
+    lateinit var imageView: ImageView
 
 
     private val addEditToDoViewModel: AddEditFoodReviewViewModel by viewModels {
@@ -38,33 +36,40 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_edit_to_do)
 
         etTitle = findViewById(R.id.etToDoTitle)
-        etContent = findViewById(R.id.etEditContent)
+        etOrder = findViewById(R.id.etEditContent)
         etPrice = findViewById(R.id.etPrice)
-//        ratingBar= findViewById(R.id.ratingBar)
+        ratingBar = findViewById(R.id.ratingBar)
         etReview = findViewById(R.id.etReviewContent)
-        imageView = findViewById(R.id.imageView)
 
-        val myUri: Uri? = Uri.parse("")
-        imageView.setImageURI(myUri)
-//        etDate = findViewById(R.id.editTextDate)
-//        checkBox = findViewById(R.id.cbMarkComplete)
-        val id = intent.getIntExtra(EXTRA_ID, -1)
-        if (id == -1) {
-            populateNewreviewItem()
-        } else {
-            populateExistingreviewItem(id)
+        // TODO: Add Image Capability
+//        imageView = findViewById(R.id.imageView)
+
+//        val myUri: Uri? = Uri.parse("")
+//        imageView.setImageURI(myUri)
+//        val id = intent.getIntExtra(EXTRA_ID, -1)
+//        if (id == -1) {
+//            populateNewreviewItem()
+//        } else {
+//            populateExistingreviewItem(id)
+//        }
+
+        val id = intent.getIntExtra(EXTRA_ID,-1)
+        if (id == -1){
+            populateNewFoodReview()
+        }else{
+            populateExistingFoodReview(id)
         }
     }
 
-    fun populateNewreviewItem() {
+    fun populateNewFoodReview() {
         reviewItem = FoodReviewItem(
             null, "", 0.0, 0.0, "",
-            1, 0, "", "", ""
+            1.0, 0.0, "Order...", "Review...", ""
         )
         updateViewUI()
     }
 
-    fun populateExistingreviewItem(id: Int) {
+    fun populateExistingFoodReview(id: Int) {
         addEditToDoViewModel.start(id)
         addEditToDoViewModel.FoodReviewItem.observe(this) {
             if (it != null) {
@@ -76,7 +81,10 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
 
     fun updateViewUI() {
         etTitle.setText(reviewItem.restName)
-        etContent.setText(reviewItem.restReview)
+        etOrder.setText(reviewItem.restItemsOrdered)
+        etPrice.setText(reviewItem.restPricing.toString())
+        ratingBar.rating = reviewItem.restRating.toFloat()
+        etReview.setText(reviewItem.restReview)
     }
 
     fun deleteClicked(view: View) {
@@ -108,7 +116,10 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
 
     private fun getFieldsIntoItem() {
         reviewItem.restName = etTitle.text.toString()
-        reviewItem.restReview = etContent.text.toString()
+        reviewItem.restReview = etReview.text.toString()
+        reviewItem.restPricing = etPrice.text.toString().toDouble()
+        reviewItem.restItemsOrdered = etOrder.text.toString()
+        reviewItem.restRating = ratingBar.rating.toDouble()
     }
 
     companion object {

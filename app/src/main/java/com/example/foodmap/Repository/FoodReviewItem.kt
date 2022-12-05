@@ -11,8 +11,8 @@ data class FoodReviewItem(
     @ColumnInfo(name = "longitude") var longitude: Double,
     @ColumnInfo(name = "latitude") var latitude: Double,
     @ColumnInfo(name = "restName") var restName: String,
-    @ColumnInfo(name = "restRating") var restRating: Int,
-    @ColumnInfo(name = "restPricing") var restPricing: Int,
+    @ColumnInfo(name = "restRating") var restRating: Double,
+    @ColumnInfo(name = "restPricing") var restPricing: Double,
     @ColumnInfo(name = "restItemsOrdered") var restItemsOrdered: String,
     @ColumnInfo(name = "restReview") var restReview: String,
     @ColumnInfo(name = "restPictureURL") var restPictureURL: String
