@@ -23,12 +23,19 @@ class FoodReviewItemListActivity : AppCompatActivity() {
 
     private var user1Uuid = "0"
 
-    val startAddEditToDoActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-            result: ActivityResult ->
-        if(result.resultCode== Activity.RESULT_OK){
-            Log.d("MainActivity","Completed")
+    val startAddEditToDoActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                Log.d("MainActivity", "Completed")
+            }
         }
-    }
+
+    private val startFriendsActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                Log.d("MainActivity", "Completed")
+            }
+        }
 
     val startUserSignUpActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -37,7 +44,10 @@ class FoodReviewItemListActivity : AppCompatActivity() {
                 intentData?.getStringExtra(UserSignUpActivity.USER_UUID)?.let { userData ->
                     user1Uuid = userData.toString()
                     Log.d("MainActivity", "SIGNING IN USER $user1Uuid")
-                    Log.d("MainActivity", "Email of current user is " + FirebaseUtil().getCurrentUserEmail())
+                    Log.d(
+                        "MainActivity",
+                        "Email of current user is " + FirebaseUtil().getCurrentUserEmail()
+                    )
                     foodReviewListViewModel.purgeDB()
                     subscribeToRealtimeUpdates()
                 }
@@ -48,15 +58,26 @@ class FoodReviewItemListActivity : AppCompatActivity() {
         FoodReviewListViewModel.FoodReviewListViewModelFactory((application as FoodMapApplication).repository)
     }
 
+    private val startMapsActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                Log.d("MainActivity", "Completed")
+            }
+        }
 
-    fun recyclerAdapterItemClicked(itemId:Int){
-        startAddEditToDoActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java).putExtra(AddEditFoodReviewActivity.EXTRA_ID,itemId))
+    fun recyclerAdapterItemClicked(itemId: Int) {
+        startAddEditToDoActivity.launch(
+            Intent(
+                this,
+                AddEditFoodReviewActivity::class.java
+            ).putExtra(AddEditFoodReviewActivity.EXTRA_ID, itemId)
+        )
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do_list)
-
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
         val adapter = FoodReviewListAdapter(this::recyclerAdapterItemClicked)
         recyclerView.adapter = adapter
@@ -70,23 +91,33 @@ class FoodReviewItemListActivity : AppCompatActivity() {
             }
         }
 
-        val fab = findViewById<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener {
-            startAddEditToDoActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java))
+        val addToDoActionBtn = findViewById<FloatingActionButton>(R.id.fab)
+        addToDoActionBtn.setOnClickListener {
+            startAddEditToDoActivity.launch(Intent(this, AddEditFoodReviewActivity::class.java))
         }
 
-//
-//        if (user1Uuid == "0"){
-//            val launchIntent = Intent(this@FoodReviewItemListActivity, UserSignUpActivity::class.java)
-//            startUserSignUpActivity.launch(launchIntent)
-//        }
+        val mapsActionBtn = findViewById<FloatingActionButton>(R.id.mapFloatingActionBtn)
+        mapsActionBtn.setOnClickListener {
+            // TODO: Setup Maps Activity for this to launch to the correct one
+//            startMapsActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java))
+        }
+
+        val friendsActionBtn = findViewById<FloatingActionButton>(R.id.friendsFloatingActionBtn)
+        friendsActionBtn.setOnClickListener {
+            // TODO: Setup Friends Activity for this to launch to the correct one
+//            startFriendsActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java))
+        }
 
     }
 
+
     private fun subscribeToRealtimeUpdates() {
-        var db = FirebaseUtil()
+        val db = FirebaseUtil()
         db.connection.collection("Food Reviews")
-            .whereEqualTo("ownerID", "CURRENT_USER_EMAIL") //Eventually, have call to get currUserEmail + implement following system
+            .whereEqualTo(
+                "ownerID",
+                "CURRENT_USER_EMAIL"
+            ) //Eventually, have call to get currUserEmail + implement following system
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w("MainActivity", "Listen failed.", e)

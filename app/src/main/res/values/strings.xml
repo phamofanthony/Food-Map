@@ -13,4 +13,6 @@
     <string name="food_map">Food map</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_in">Sign In</string>
+    <string name="friends_floating_action">Friends Floating Action</string>
+    <string name="maps_floating_action_button">Maps Floating Action Button</string>
 </resources>
