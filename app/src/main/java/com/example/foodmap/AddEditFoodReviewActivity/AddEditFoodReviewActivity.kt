@@ -1,30 +1,29 @@
 package com.example.foodmap.AddEditFoodReviewActivity
 
-import android.icu.text.DateFormat.*
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.activity.viewModels
 import com.example.foodmap.Repository.FoodReviewItem
 import com.example.foodmap.FoodMapApplication
-import com.example.foodmap.Util.DatePickerFragment
-import com.example.foodmap.Util.TimePickerFragment
 import com.example.foodmap.R
-
-
-import java.util.*
 
 class AddEditFoodReviewActivity : AppCompatActivity() {
 
     private lateinit var reviewItem: FoodReviewItem
     private lateinit var etTitle: EditText
     private lateinit var etContent: EditText
-    private lateinit var etDate: Button
-    private lateinit var checkBox: CheckBox
+    private lateinit var etPrice: EditText
+//    private lateinit var ratingBar: RatingBar
+    private lateinit var etReview: EditText
+    lateinit var imageView: ImageView
+
+//    private lateinit var etDate: Button
+//    private lateinit var checkBox: CheckBox
 
 
     private val addEditToDoViewModel: AddEditFoodReviewViewModel by viewModels {
@@ -40,8 +39,15 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
 
         etTitle = findViewById(R.id.etToDoTitle)
         etContent = findViewById(R.id.etEditContent)
-        etDate = findViewById(R.id.editTextDate)
-        checkBox = findViewById(R.id.cbMarkComplete)
+        etPrice = findViewById(R.id.etPrice)
+//        ratingBar= findViewById(R.id.ratingBar)
+        etReview = findViewById(R.id.etReviewContent)
+        imageView = findViewById(R.id.imageView)
+
+        val myUri: Uri? = Uri.parse("")
+        imageView.setImageURI(myUri)
+//        etDate = findViewById(R.id.editTextDate)
+//        checkBox = findViewById(R.id.cbMarkComplete)
         val id = intent.getIntExtra(EXTRA_ID, -1)
         if (id == -1) {
             populateNewreviewItem()
@@ -71,7 +77,6 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
     fun updateViewUI() {
         etTitle.setText(reviewItem.restName)
         etContent.setText(reviewItem.restReview)
-        etDate.setText("")
     }
 
     fun deleteClicked(view: View) {
@@ -104,20 +109,6 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
     private fun getFieldsIntoItem() {
         reviewItem.restName = etTitle.text.toString()
         reviewItem.restReview = etContent.text.toString()
-    }
-
-    fun dateSet(calendar: Calendar) {
-        TimePickerFragment(calendar, this::timeSet).show(supportFragmentManager, "timePicker")
-    }
-
-    fun timeSet(calendar: Calendar) {
-        etDate.setText(
-            java.text.DateFormat.getDateTimeInstance(DEFAULT, SHORT).format(calendar.timeInMillis)
-        )
-    }
-
-    fun dateClicked(view: View) {
-        DatePickerFragment(this::dateSet).show(supportFragmentManager, "datePicker")
     }
 
     companion object {
