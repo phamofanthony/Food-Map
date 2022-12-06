@@ -109,10 +109,10 @@ class FoodReviewItemListActivity : AppCompatActivity() {
 //            startFriendsActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java))
         }
 
-        if (user1Uuid == "0"){
-            val launchIntent = Intent(this@FoodReviewItemListActivity, UserEntryActivity::class.java)
-            startUserEntryActivity.launch(launchIntent)
-        }
+//        if (user1Uuid == "0"){
+//            val launchIntent = Intent(this@FoodReviewItemListActivity, UserEntryActivity::class.java)
+//            startUserEntryActivity.launch(launchIntent)
+//        }
 
     }
 
