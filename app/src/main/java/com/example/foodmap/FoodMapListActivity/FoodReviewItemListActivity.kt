@@ -16,7 +16,7 @@ import com.example.foodmap.R
 import com.example.foodmap.FoodMapApplication
 import com.example.foodmap.Repository.FirebaseUtil
 import com.example.foodmap.Repository.FoodReviewItem
-import com.example.foodmap.UserSignUp.UserSignUpActivity
+import com.example.foodmap.UserSignUp.UserEntryActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.ktx.toObject
 
@@ -38,11 +38,11 @@ class FoodReviewItemListActivity : AppCompatActivity() {
             }
         }
 
-    val startUserSignUpActivity =
+    val startUserEntryActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val intentData = result.data
-                intentData?.getStringExtra(UserSignUpActivity.USER_UUID)?.let { userData ->
+                intentData?.getStringExtra(UserEntryActivity.USER_UUID)?.let { userData ->
                     user1Uuid = userData.toString()
                     Log.d("MainActivity", "SIGNING IN USER $user1Uuid")
                     Log.d(
@@ -109,6 +109,11 @@ class FoodReviewItemListActivity : AppCompatActivity() {
 //            startFriendsActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java))
         }
 
+        if (user1Uuid == "0"){
+            val launchIntent = Intent(this@FoodReviewItemListActivity, UserEntryActivity::class.java)
+            startUserEntryActivity.launch(launchIntent)
+        }
+
     }
 
 
@@ -117,7 +122,7 @@ class FoodReviewItemListActivity : AppCompatActivity() {
         db.connection.collection("Food Reviews")
             .whereEqualTo(
                 "ownerID",
-                "CURRENT_USER_EMAIL"
+                db.getCurrentUserEmail()
             ) //Eventually, have call to get currUserEmail + implement following system
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {

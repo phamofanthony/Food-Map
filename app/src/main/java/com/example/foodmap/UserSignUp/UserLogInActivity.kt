@@ -13,9 +13,8 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class UserSignUpActivity : AppCompatActivity() {
-    private lateinit var firstNameText: TextInputEditText
-    private lateinit var lastNameText: TextInputEditText
+class UserLogInActivity : AppCompatActivity() {
+
     private lateinit var emailText: TextInputEditText
     private lateinit var passwordText: TextInputEditText
     private lateinit var confirmBtn: Button
@@ -25,41 +24,34 @@ class UserSignUpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_sign_up)
+        setContentView(R.layout.activity_user_log_in)
 
-        firstNameText = findViewById(R.id.signUpFirstName)
-        lastNameText = findViewById(R.id.signUpLastName)
-        emailText = findViewById(R.id.signUpEmail)
-        passwordText = findViewById(R.id.signUpPassword)
-        confirmBtn = findViewById(R.id.signUpConfirmBtn)
+        emailText = findViewById(R.id.logInEmail)
+        passwordText = findViewById(R.id.logInPassword)
+        confirmBtn = findViewById(R.id.logInConfirmBtn)
 
         confirmBtn.setOnClickListener {
             if (emailText.text.toString() == "" || passwordText.text.toString() == "") {
-                Toast.makeText(baseContext, "Please ensure all fields are filled out.", Toast.LENGTH_LONG).show()
+                Toast.makeText(baseContext, "Please ensure both email and password are filled out.", Toast.LENGTH_LONG).show()
             }
             else {
-                auth.createUserWithEmailAndPassword(emailText.text.toString(), passwordText.text.toString())
+                auth.signInWithEmailAndPassword(emailText.text.toString(), passwordText.text.toString())
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("UserSignUpActivity", "createUserWithEmail:success")
+                            Log.d("UserSignUpActivity", "signInWithEmail:success")
                             val user = auth.currentUser
-
                             if (user != null) {
                                 val uuid = user.uid
-
-                                db.makeNewUserDocument(firstNameText.text.toString(), lastNameText.text.toString(), emailText.text.toString())
-
                                 val replyIntent = Intent()
                                 replyIntent.putExtra(USER_UUID, uuid)
                                 setResult(Activity.RESULT_OK, replyIntent)
                                 finish()
                             }
-
-                        } else {
+                        }
+                        else {
                             // If sign in fails, display a message to the user.
-                            Log.w("UserSignUpActivity", "createUserWithEmail:failure", task.exception)
+                            Log.w("UserSignUpActivity", "signInWithEmail:failure", task.exception)
                             val message = task.exception?.message
                             Toast.makeText(
                                 baseContext, "$message",
@@ -69,6 +61,7 @@ class UserSignUpActivity : AppCompatActivity() {
                     }
             }
         }
+
     }
 
     companion object {

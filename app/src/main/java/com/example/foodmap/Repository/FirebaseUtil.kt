@@ -138,7 +138,8 @@ class FirebaseUtil {
             "Email" to email,
             "FollowingList" to email
         )
-        communityRef.document(email).set(newUserInfo) //Add an item to the collection
+        communityRef.document(email)
+            .set(newUserInfo) //Add an item to the collection
     }
 
 

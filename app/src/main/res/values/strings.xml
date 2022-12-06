@@ -18,6 +18,7 @@
     <string name="sign_in">Sign In</string>
     <string name="friends_floating_action">Friends Floating Action</string>
     <string name="maps_floating_action_button">Maps Floating Action Button</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="share_with_friends">Share with Friends</string>
     <string name="open_map">Open Map</string>
     <string name="addtodo">AddToDo</string>

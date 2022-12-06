@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"  />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <queries>
         <intent>
             <action android:name="android.media.action.IMAGE_CAPTURE" />
         </intent>
     </queries>
-
 
     <application
         android:name=".FoodMapApplication"
@@ -24,11 +24,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FoodMap"
         tools:targetApi="31">
-
+        <activity
+            android:name=".UserSignUp.UserSignUpActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".UserSignUp.UserLogInActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".AddEditFoodReviewActivity.AddEditFoodReviewActivity"
-            android:parentActivityName=".FoodMapListActivity.FoodReviewItemListActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".FoodMapListActivity.FoodReviewItemListActivity" />
         <activity
             android:name=".FoodMapListActivity.FoodReviewItemListActivity"
             android:exported="true">
@@ -37,12 +50,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
-            android:name="com.example.foodmap.UserSignUp.UserSignUpActivity"
-            android:exported="true">
-        </activity>
+            android:name=".UserSignUp.UserEntryActivity"
+            android:exported="true" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.foodmap"
@@ -50,8 +62,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
-
     </application>
+
 </manifest>
