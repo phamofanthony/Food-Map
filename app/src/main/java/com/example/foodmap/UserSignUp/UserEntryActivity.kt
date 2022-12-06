@@ -16,33 +16,49 @@ import com.google.firebase.ktx.Firebase
 import com.example.foodmap.R.*
 import com.example.foodmap.R.id.*
 import com.example.foodmap.Repository.FirebaseUtil
+import com.example.foodmap.UserSignUp.UserEntryActivity.Companion.USER_UUID
 
 class UserEntryActivity : AppCompatActivity() {
 
     private lateinit var signUpBtn: Button
     private lateinit var logInBtn: Button
-    private lateinit var auth: FirebaseAuth
-    private lateinit var db: FirebaseUtil
+    private lateinit var uuid: String
+    var auth = Firebase.auth
+    var db = FirebaseUtil()
 
     val startUserLogInActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
-                //Done
+                val intentData = result.data
+                intentData?.getStringExtra(UserLogInActivity.USER_UUID)?.let { userData ->
+                    uuid = userData.toString()
+                }
+
+                val replyIntent = Intent()
+                replyIntent.putExtra(USER_UUID, uuid)
+                setResult(Activity.RESULT_OK, replyIntent)
+                finish()
             }
         }
 
     val startUserSignUpActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
-                //Done
+                val intentData = result.data
+                intentData?.getStringExtra(UserSignUpActivity.USER_UUID)?.let { userData ->
+                    uuid = userData.toString()
+                }
+
+                val replyIntent = Intent()
+                replyIntent.putExtra(USER_UUID, uuid)
+                setResult(Activity.RESULT_OK, replyIntent)
+                finish()
             }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_user_entry)
-        auth = Firebase.auth
-        db = FirebaseUtil()
 
         signUpBtn = findViewById(entrySignUpBtn)
         logInBtn = findViewById(entryLogInBtn)

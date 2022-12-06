@@ -25,14 +25,14 @@
         android:theme="@style/Theme.FoodMap"
         tools:targetApi="31">
         <activity
-            android:name=".UserSignUpActivity"
+            android:name=".UserSignUp.UserSignUpActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".UserLogInActivity"
+            android:name=".UserSignUp.UserLogInActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UserEntryActivity"
+            android:name=".UserSignUp.UserEntryActivity"
             android:exported="true" />
 
         <provider

@@ -121,7 +121,7 @@ class FoodReviewItemListActivity : AppCompatActivity() {
         db.connection.collection("Food Reviews")
             .whereEqualTo(
                 "ownerID",
-                "CURRENT_USER_EMAIL"
+                db.getCurrentUserEmail()
             ) //Eventually, have call to get currUserEmail + implement following system
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
