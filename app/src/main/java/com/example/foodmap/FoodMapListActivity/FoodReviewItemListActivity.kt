@@ -119,7 +119,7 @@ class FoodReviewItemListActivity : AppCompatActivity() {
 
     private fun subscribeToRealtimeUpdates() {
         val db = FirebaseUtil()
-        db.connection.collection("Food Reviews")
+        db.connection.collection("FoodReviews")
             .whereEqualTo(
                 "ownerID",
                 db.getCurrentUserEmail()

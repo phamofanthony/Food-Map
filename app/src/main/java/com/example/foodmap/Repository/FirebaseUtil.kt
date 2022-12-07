@@ -44,7 +44,7 @@ class FirebaseUtil {
         getNewCount() {result ->
             var reviewsRef = connection.collection("FoodReviews") //Reference to the reviews collection
             var newReview = hashMapOf(
-                "id" to result,
+                "postID" to result,
                 "latitude" to foodReview.latitude,
                 "longitude" to foodReview.longitude,
                 "ownerID" to getCurrentUserEmail(),
@@ -52,7 +52,8 @@ class FirebaseUtil {
                 "restPictureURL" to foodReview.restPictureURL,
                 "restPricing" to foodReview.restPricing,
                 "restRating" to foodReview.restRating,
-                "restReview" to foodReview.restReview
+                "restReview" to foodReview.restReview,
+                "name" to foodReview.name
             )
             reviewsRef.document(getCurrentUserEmail() + "_" + foodReview.restName).set(newReview)
         }
