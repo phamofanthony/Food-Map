@@ -2,6 +2,7 @@ package com.example.foodmap.MapsActivity
 
 import android.Manifest
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.os.Environment
@@ -9,8 +10,11 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
+import com.example.foodmap.FoodMapApplication
 import com.example.foodmap.R
 import com.example.foodmap.replaceFragmentInActivity
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -35,20 +39,11 @@ class MapsActivity : AppCompatActivity() {
     private lateinit var locationProviderClient: FusedLocationProviderClient
     //Member object for the last known location
     private lateinit var mCurrentLocation: Location
+    private lateinit var defaultlocation: Location
     //Member object to hold onto locationCallback object
     //Needed to remove requests for location updates
     private lateinit var mLocationCallback: LocationCallback
 
-
-    val takePictureResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-            result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_CANCELED) {
-            Toast.makeText(applicationContext, "No picture taken", Toast.LENGTH_LONG)
-        }else{
-            Log.d("MainActivity","Picture Taken at location $currentPhotoPath")
-
-        }
-    }
     val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (isGranted) {
@@ -59,20 +54,19 @@ class MapsActivity : AppCompatActivity() {
             }
         }
 
-    /*
+
     private val mapsViewModel: MapsViewModel by viewModels {
-        MapsViewModel.FoodReviewItemListViewModelFactory((application as GeoPhotoApplication).repository)
-    } */
+        MapsViewModel.FoodReviewListListViewModelFactory((application as FoodMapApplication).repository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
 
-        /*
-        findViewById<FloatingActionButton>(R.id.floatingActionButton).setOnClickListener{
-            Log.d("MainAcivity", "Photo button clicked")
-            takeNewPhoto()
-        } */
+        defaultlocation = Location("")
+        defaultlocation.latitude = 0.0
+        defaultlocation.longitude = 0.0
+        mCurrentLocation = defaultlocation
 
         //Get preferences for tile cache
         Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this))
@@ -92,14 +86,14 @@ class MapsActivity : AppCompatActivity() {
 
 
         //Begin observing data changes
-        /*
-        mapsViewModel.allGeoPhoto.observe(this){
-                geoPhotos->
-            geoPhotos.let {
-                for(photo in geoPhotos){
-                    val latitude = photo.value.latitude
-                    val longitude = photo.value.longitude
-                    val id = photo.value.id
+
+        mapsViewModel.allReviews.observe(this){
+                reviews->
+            reviews.let {
+                for(review in reviews){
+                    val latitude = review.value.latitude
+                    val longitude = review.value.longitude
+                    val id = review.value.postID
                     var geoPoint: GeoPoint? = null
 
                     if(latitude!=null){
@@ -112,7 +106,7 @@ class MapsActivity : AppCompatActivity() {
                     }
                 }
             }
-        } */
+        }
 
 
     }
@@ -142,58 +136,8 @@ class MapsActivity : AppCompatActivity() {
             locationRequestsEnabled = createLocationRequest(this,locationProviderClient,mLocationCallback)
         }
     }
-    /*
-    private fun takeNewPhoto(){
 
-        //Collect currentPhotoPath
-        Log.d("MainActivity","Entered takeNewPhoto")
-        val picIntent = Intent().setAction(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (picIntent.resolveActivity(packageManager) != null){
-            val filepath: String = createFilePath()
-            val myFile: File = File(filepath)
-            currentPhotoPath = filepath
-            val photoUri = FileProvider.getUriForFile(this,"edu.uark.ahnelson.assignment3solution.fileprovider",myFile)
-            picIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoUri)
-            takePictureResultLauncher.launch(picIntent)
-        }
-
-
-        var newGeoPhoto:GeoPhoto = GeoPhoto(null, currentPhotoPath, mCurrentLocation.latitude, mCurrentLocation.longitude, 9001.00, "Description...")
-        Log.d("MainActivity", newGeoPhoto.toString())
-        (applicationContext as GeoPhotoApplication).applicationScope.launch {
-            (applicationContext as GeoPhotoApplication).repository.insert(newGeoPhoto)
-        }
-
-
-        /*(applicationContext as GeoPhotoApplication).applicationScope.launch {
-            val intent = Intent(applicationContext, MarkerViewActivity::class.java)
-            val newPhotoID: Int =
-                (applicationContext as GeoPhotoApplication).repository.getGeoPhotoId(
-                    currentPhotoPath
-                )
-            intent.putExtra("ID", newPhotoID.toString())
-            startActivity(intent)
-        }*/
-    } */
-
-    private fun createFilePath(): String {
-        // Create an image file name
-        val timeStamp =
-            SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-        val imageFileName = "JPEG_" + timeStamp + "_"
-        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val image = File.createTempFile(
-            imageFileName,  /* prefix */
-            ".jpg",  /* suffix */
-            storageDir /* directory */
-        )
-        // Save a file: path for use with ACTION_VIEW intent
-        return image.absolutePath
-    }
-
-
-
-    /*private fun checkForLocationPermission(){
+    private fun checkForLocationPermission(){
         when {
             ContextCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION
@@ -205,7 +149,7 @@ class MapsActivity : AppCompatActivity() {
                 requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             }
         }
-    }*/
+    }
 
     private val locationPermissionRequest = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -242,12 +186,24 @@ class MapsActivity : AppCompatActivity() {
         //If locationUtil returns a Location object
         //Populate the current location and log
         override fun locationUpdatedCallback(location: Location) {
-            mCurrentLocation = location
-            val lat = (location.latitude * 1E6).toInt()
-            val lng = (location.longitude * 1E6).toInt()
-            val point = GeoPoint(lat, lng)
-            mapsFragment.changeCenterLocation(point)
-            Log.d("MainActivity","Location is [Lat: ${location.latitude}, Long: ${location.longitude}]")
+            if (mCurrentLocation == defaultlocation) {
+                mCurrentLocation = location
+                val lat = (location.latitude * 1E6).toInt()
+                val lng = (location.longitude * 1E6).toInt()
+                val point = GeoPoint(lat, lng)
+                mapsFragment.changeCenterLocation(point)
+            }
+            else {
+                mCurrentLocation = location
+                val lat = (location.latitude * 1E6).toInt()
+                val lng = (location.longitude * 1E6).toInt()
+                val point = GeoPoint(lat, lng)
+
+                Log.d(
+                    "MainActivity",
+                    "Location is [Lat: ${location.latitude}, Long: ${location.longitude}]"
+                )
+            }
         }
     }
 }

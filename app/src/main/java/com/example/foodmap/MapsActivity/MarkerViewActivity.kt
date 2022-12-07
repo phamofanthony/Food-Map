@@ -1,22 +1,31 @@
 package com.example.foodmap.MapsActivity
 
 import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.RatingBar
 import androidx.activity.viewModels
+import com.example.foodmap.FoodMapApplication
 import com.example.foodmap.R
+import com.example.foodmap.Repository.FoodReviewItem
+import kotlinx.coroutines.launch
 
 class MarkerViewActivity : AppCompatActivity() {
-    /*
+
     private var markerID: Int = -1
-    private lateinit var captionText: EditText
-    private lateinit var imageView: ImageView
-    /*private val mapsViewModel: MapsViewModel by viewModels {
-        MapsViewModel.ToDoListViewModelFactory((application as GeoPhotoApplication).repository)
-    } */
+    private lateinit var reviewItem: FoodReviewItem
+    private lateinit var titleText: EditText
+    private lateinit var priceBar: RatingBar
+    private lateinit var ratingBar: RatingBar
+    private lateinit var reviewText: EditText
+    private lateinit var reviewImageView: ImageView
+    private val mapsViewModel: MapsViewModel by viewModels {
+        MapsViewModel.FoodReviewListListViewModelFactory((application as FoodMapApplication).repository)
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,73 +36,46 @@ class MarkerViewActivity : AppCompatActivity() {
         val markerIDString = intent.getStringExtra("ID").toString()
         markerID = markerIDString.toInt()
 
-        //captionText = findViewById(R.id.imageCaption)
-        //imageView = findViewById(R.id.imageView)
+        titleText = findViewById(R.id.MarkerTitle)
+        priceBar = findViewById(R.id.MarkerPriceBar)
+        ratingBar = findViewById(R.id.MarkerRatingBar)
+        reviewText = findViewById(R.id.MarkerReview)
+        reviewImageView = findViewById(R.id.MarkerImageView)
 
-        Log.d("imageView dimensions:", "" + imageView.getWidth() + " " + imageView.getHeight())
-
-        setCaption()
-        setPicture()
+        setView()
     }
 
-    fun setPicture() {
-        var currentPhotoPath = ""
 
-        (applicationContext as GeoPhotoApplication).applicationScope.launch {
-            currentPhotoPath =
-                (applicationContext as GeoPhotoApplication).repository.getGeoPhotoFilePathById(markerID)
-            Log.d("Alpha", "In activity, imagePath is " + currentPhotoPath)
-            // Get the dimensions of the View
-            val targetW: Int = 500//imageView.getWidth()
-            val targetH: Int = 300//imageView.getHeight()
-            Log.d("MVA", "imageView:"+ targetW + " " + targetH)
+    fun setView() {
 
-            // Get the dimensions of the bitmap
-            Log.d("MVA", "Photopath:"+ currentPhotoPath)
-            val bmOptions = BitmapFactory.Options()
-            bmOptions.inJustDecodeBounds = true
-            BitmapFactory.decodeFile(currentPhotoPath, bmOptions)
-
-
-            val photoW = bmOptions.outWidth
-            val photoH = bmOptions.outHeight
-
-            // Determine how much to scale down the image
-            Log.d("MVA", "Photo: " + photoW + " " + photoH)
-            val scaleFactor = Math.max(1, Math.min(photoW / targetW, photoH / targetH))
-
-            // Decode the image file into a Bitmap sized to fill the View
-            bmOptions.inJustDecodeBounds = false
-            bmOptions.inSampleSize = scaleFactor
-            val bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions)
-            //imageView.setImageBitmap(bitmap)
-            runOnUiThread {
-                imageView.setImageBitmap(bitmap)
-            }
-        }
-
-    }
-
-    fun setCaption() {
-        var imageCaption = ""
-        (applicationContext as GeoPhotoApplication).applicationScope.launch {
-            imageCaption =
-                (applicationContext as GeoPhotoApplication).repository.getGeoPhotoCaptionById(
+        (applicationContext as FoodMapApplication).applicationScope.launch {
+            reviewItem =
+                (applicationContext as FoodMapApplication).repository.getReviewItem(
                     markerID
                 )
-            Log.d("Alpha", "In activity, imageCaption is " + imageCaption)
-            captionText.setText(imageCaption)
+            titleText.setText(reviewItem.restName)
+            priceBar.setRating((reviewItem.restPricing).toFloat())
+            ratingBar.setRating((reviewItem.restRating).toFloat())
+            reviewText.setText(reviewItem.restReview)
+            if (reviewItem.restPictureURL != ""){
+                val myUri: Uri? = Uri.parse(reviewItem.restPictureURL)
+                reviewImageView.setImageURI(myUri)
+            }
+
         }
     }
+
+
 
 
     override fun onStop() {
         super.onStop()
-        (applicationContext as GeoPhotoApplication).applicationScope.launch {
-            (applicationContext as GeoPhotoApplication).repository.updateGeoPhotoCaption(markerID, captionText.text.toString())
-        }
+        /*
+        (applicationContext as FoodMapApplication).applicationScope.launch {
+            (applicationContext as FoodMapApplication).repository.updateGeoPhotoCaption(markerID, captionText.text.toString())
+        } */
 
     }
     companion object {
-    } */
+    }
 }

@@ -29,7 +29,7 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
     private lateinit var mLocationOverlay: MyLocationNewOverlay
     private lateinit var mCompassOverlay: CompassOverlay
     private lateinit var markerViewFragment:Fragment
-    private var curLocation = GeoPoint(34.74,-92.28)
+    private var curLocation = GeoPoint(0.0,0.0)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -150,14 +150,14 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
     override fun onMarkerClick(marker: Marker?, mapView: MapView?): Boolean {
         //marker?.id?.let { Log.d("OpenStreetMapFragment", it) }
         //Intent displayMarker = new Intent(this, MarkerViewActivity);
-        /*
+
         val intent = Intent(activity, MarkerViewActivity::class.java)
         if (marker != null) {
             intent.putExtra("ID", marker.id)
         }
         startActivity(intent)
 
-        */
+
         return true
     }
 

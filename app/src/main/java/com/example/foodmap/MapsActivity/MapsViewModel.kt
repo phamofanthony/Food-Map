@@ -4,15 +4,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.WorkerThread
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.foodmap.R
+import com.example.foodmap.Repository.FoodReviewItem
+import com.example.foodmap.Repository.FoodReviewListRepository
 import kotlinx.coroutines.launch
 
-class MapsViewModel(): ViewModel() {
-    /*
+class MapsViewModel(private val repository: FoodReviewListRepository): ViewModel() {
+
     @Suppress("RedudndantSuspendModifier")
     @WorkerThread
 
@@ -20,16 +19,16 @@ class MapsViewModel(): ViewModel() {
         Log.d("Alpha", "Entered getCaption")
         var result = "Replace me with caption"
         viewModelScope.launch {
-            result = repository.getGeoPhotoCaptionById(id)
+            //result = repository.getGeoPhotoCaptionById(id)
         }
         Log.d("Alpha", "Left getCaption")
         return result
-    } */
+    }
 
-    //val allGeoPhoto: LiveData<Map<Int, GeoPhoto>> = repository.allGeophotos.asLiveData()
+    val allReviews: LiveData<Map<Int, FoodReviewItem>> = repository.allReviewItems.asLiveData()
 
-    /*
-    class ToDoListViewModelFactory(private val repository: GeoPhotosRepository) : ViewModelProvider.Factory {
+
+    class FoodReviewListListViewModelFactory(private val repository: FoodReviewListRepository) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(MapsViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
@@ -37,5 +36,5 @@ class MapsViewModel(): ViewModel() {
             }
             throw IllegalArgumentException("Unknown ViewModel Class")
         }
-    } */
+    }
 }
