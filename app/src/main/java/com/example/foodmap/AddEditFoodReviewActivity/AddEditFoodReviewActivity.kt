@@ -55,12 +55,13 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_edit_to_do)
 
+        /*
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationClient.lastLocation
             .addOnSuccessListener {
                 reviewItem.longitude = it.longitude
                 reviewItem.latitude = it.latitude
-            }
+            } */
 
         FirebaseUtil().connection.collection("CommunityInfo")
             .whereEqualTo("Email", FirebaseUtil().getCurrentUserEmail())
