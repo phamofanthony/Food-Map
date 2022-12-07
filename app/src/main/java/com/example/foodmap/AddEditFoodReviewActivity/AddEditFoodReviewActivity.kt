@@ -42,7 +42,7 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
     private lateinit var reviewItem: FoodReviewItem
     private lateinit var etTitle: EditText
     private lateinit var etReview: EditText
-    private lateinit var etPrice: EditText
+    private lateinit var etPrice: RatingBar
 
     private lateinit var ratingBar: RatingBar
     lateinit var imageView: ImageView
@@ -117,7 +117,7 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
             }
 
         etTitle = findViewById(R.id.etToDoTitle)
-        etPrice = findViewById(R.id.etPrice)
+        etPrice = findViewById(R.id.priceBar)
         ratingBar = findViewById(R.id.ratingBar)
         etReview = findViewById(R.id.etReviewContent)
         imageView = findViewById(R.id.imageView)
@@ -136,7 +136,7 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
     fun populateNewFoodReview() {
         reviewItem = FoodReviewItem(
             null, "", 0.0, 0.0, "",
-            1.0, 0.0, "Review...", "", "Test User"
+            0.0, 0.0, "", "", "Test User"
         )
         updateViewUI()
     }
@@ -153,7 +153,7 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
 
     fun updateViewUI() {
         etTitle.setText(reviewItem.restName)
-        etPrice.setText(reviewItem.restPricing.toString())
+        etPrice.rating = reviewItem.restPricing.toFloat()
         ratingBar.rating = reviewItem.restRating.toFloat()
         etReview.setText(reviewItem.restReview)
         if (reviewItem.restPictureURL != ""){
@@ -251,7 +251,7 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
     private fun getFieldsIntoItem() {
         reviewItem.restName = etTitle.text.toString()
         reviewItem.restReview = etReview.text.toString()
-        reviewItem.restPricing = etPrice.text.toString().toDouble()
+        reviewItem.restPricing = etPrice.rating.toDouble()
         reviewItem.restRating = ratingBar.rating.toDouble()
         reviewItem.restPictureURL = currentPhotoPath
         reviewItem.name = fullName
