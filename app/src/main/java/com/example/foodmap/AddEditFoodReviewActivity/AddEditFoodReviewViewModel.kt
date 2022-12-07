@@ -23,7 +23,6 @@ class AddEditFoodReviewViewModel(private val repository: FoodReviewListRepositor
 
     fun insert(FoodReviewItem: FoodReviewItem) {
         viewModelScope.launch {
-            repository.insert(FoodReviewItem)
             var db = FirebaseUtil()
             db.addFoodReview(FoodReviewItem)
         }
