@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.activity.viewModels
 import com.example.foodmap.AddEditFoodReviewActivity.AddEditFoodReviewActivity
+import com.example.foodmap.AddFollowActivity.AddFollowActivity
 import com.example.foodmap.R
 import com.example.foodmap.FoodMapApplication
 import com.example.foodmap.MapsActivity.MapsActivity
@@ -25,6 +26,7 @@ class FoodReviewItemListActivity : AppCompatActivity() {
 
     private var user1Uuid = "0"
 
+    //Launches Add/Edit activity
     val startAddEditToDoActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -32,6 +34,7 @@ class FoodReviewItemListActivity : AppCompatActivity() {
             }
         }
 
+    //Launches new friend/following activity
     private val startFriendsActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -39,6 +42,7 @@ class FoodReviewItemListActivity : AppCompatActivity() {
             }
         }
 
+    //Launches login/signup activity
     val startUserEntryActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -51,7 +55,19 @@ class FoodReviewItemListActivity : AppCompatActivity() {
                         "Email of current user is " + FirebaseUtil().getCurrentUserEmail()
                     )
                     foodReviewListViewModel.purgeDB()
-                    subscribeToRealtimeUpdates()
+
+                    FirebaseUtil().connection.collection("CommunityInfo")
+                        .whereEqualTo("Email", FirebaseUtil().getCurrentUserEmail())
+                        .get()
+                        .addOnSuccessListener { documents ->
+                            for (document in documents) {
+                                followingString = (document.data?.get("FollowingList")
+                                    .toString())
+                            }
+                            followingList = followingString.split(",").map {it.trim()}
+                            Log.d("MainActivity", "Following List: " + followingList.toString())
+                            subscribeToRealtimeUpdates()
+                        }
                 }
             }
         }
@@ -76,6 +92,8 @@ class FoodReviewItemListActivity : AppCompatActivity() {
         )
     }
 
+    lateinit var followingString: String
+    var followingList: List<String> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +102,6 @@ class FoodReviewItemListActivity : AppCompatActivity() {
         val adapter = FoodReviewListAdapter(this::recyclerAdapterItemClicked)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
-
 
         foodReviewListViewModel.allReviewItems.observe(this) { reviewitem ->
             // Update the cached copy of the words in the adapter.
@@ -105,8 +122,7 @@ class FoodReviewItemListActivity : AppCompatActivity() {
 
         val friendsActionBtn = findViewById<ImageButton>(R.id.friendsBtn)
         friendsActionBtn.setOnClickListener {
-            // TODO: Setup Friends Activity for this to launch to the correct one
-//            startFriendsActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java))
+            startFriendsActivity.launch(Intent(this,AddFollowActivity::class.java))
         }
 
         if (user1Uuid == "0"){
@@ -120,9 +136,9 @@ class FoodReviewItemListActivity : AppCompatActivity() {
     private fun subscribeToRealtimeUpdates() {
         val db = FirebaseUtil()
         db.connection.collection("FoodReviews")
-            .whereEqualTo(
+            .whereIn(
                 "ownerID",
-                db.getCurrentUserEmail()
+                followingList
             ) //Eventually, have call to get currUserEmail + implement following system
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {

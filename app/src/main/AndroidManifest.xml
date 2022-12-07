@@ -26,6 +26,13 @@
         android:theme="@style/Theme.FoodMap"
         tools:targetApi="31">
         <activity
+            android:name=".AddFollowActivity.AddFollowActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".MapsActivity.MarkerViewActivity"
             android:exported="false">
             <meta-data
