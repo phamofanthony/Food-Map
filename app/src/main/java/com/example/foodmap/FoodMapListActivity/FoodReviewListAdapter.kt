@@ -29,7 +29,7 @@ class FoodReviewListAdapter(
         val current = getItem(position)
         current.postID?.let {
             holder.bind(
-                current.restName, current.restPricing.toFloat(), current.name
+                current.restName, current.restRating.toFloat(), current.name
             )
         }
         holder.itemView.tag = current.postID
