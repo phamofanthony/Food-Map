@@ -1,5 +1,6 @@
 package com.example.foodmap.AddEditFoodReviewActivity
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -20,6 +21,9 @@ import androidx.core.content.FileProvider
 import com.example.foodmap.Repository.FoodReviewItem
 import com.example.foodmap.FoodMapApplication
 import com.example.foodmap.R
+import com.example.foodmap.Repository.FirebaseUtil
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.File
 import java.text.SimpleDateFormat
@@ -34,6 +38,8 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
 
     private lateinit var ratingBar: RatingBar
     lateinit var imageView: ImageView
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var fullName: String
 
     var currentPhotoPath: String = ""
 
@@ -44,9 +50,27 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
         )
     }
 
+    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_edit_to_do)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener {
+                reviewItem.longitude = it.longitude
+                reviewItem.latitude = it.latitude
+            }
+
+        FirebaseUtil().connection.collection("CommunityInfo")
+            .whereEqualTo("Email", FirebaseUtil().getCurrentUserEmail())
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    fullName = (document.data?.get("FirstName")
+                        .toString()) + " " + (document.data?.get("LastName").toString())
+                }
+            }
 
         etTitle = findViewById(R.id.etToDoTitle)
         etPrice = findViewById(R.id.etPrice)
@@ -186,6 +210,7 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
         reviewItem.restPricing = etPrice.text.toString().toDouble()
         reviewItem.restRating = ratingBar.rating.toDouble()
         reviewItem.restPictureURL = currentPhotoPath
+        reviewItem.name = fullName
     }
 
     companion object {
