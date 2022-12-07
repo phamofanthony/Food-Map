@@ -1,8 +1,11 @@
 package com.example.foodmap.AddEditFoodReviewActivity
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,13 +20,18 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import com.example.foodmap.Repository.FoodReviewItem
 import com.example.foodmap.FoodMapApplication
 import com.example.foodmap.R
 import com.example.foodmap.Repository.FirebaseUtil
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.CancellationToken
+import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.File
 import java.text.SimpleDateFormat
@@ -50,18 +58,60 @@ class AddEditFoodReviewActivity : AppCompatActivity() {
         )
     }
 
-    @SuppressLint("MissingPermission")
+    private val locationPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        when {
+            //If successful, startLocationRequests
+            permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+            }
+            //If successful at coarse detail, we still want those
+            permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+            } else -> {
+            //Otherwise, send toast saying location is not enabled
+            Toast.makeText(this,"Location Not Enabled", Toast.LENGTH_LONG)
+        }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_edit_to_do)
 
-        /*
+        locationPermissionRequest.launch(arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION))
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener {
-                reviewItem.longitude = it.longitude
-                reviewItem.latitude = it.latitude
-            } */
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, object : CancellationToken() {
+            override fun onCanceledRequested(p0: OnTokenCanceledListener) = CancellationTokenSource().token
+            override fun isCancellationRequested() = false
+        })
+            .addOnSuccessListener { location: Location? ->
+                if (location == null)
+                    Toast.makeText(this, "Cannot get location.", Toast.LENGTH_SHORT).show()
+                else {
+                    reviewItem.latitude = location.latitude
+                    reviewItem.longitude = location.longitude
+                }
+            }
 
         FirebaseUtil().connection.collection("CommunityInfo")
             .whereEqualTo("Email", FirebaseUtil().getCurrentUserEmail())
