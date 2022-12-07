@@ -54,7 +54,7 @@ class FirebaseUtil {
                 "restRating" to foodReview.restRating,
                 "restReview" to foodReview.restReview
             )
-            reviewsRef.document("CURRENTUSEREMAIL" + "_" + foodReview.restName).set(newReview)
+            reviewsRef.document(getCurrentUserEmail() + "_" + foodReview.restName).set(newReview)
         }
     }
 
@@ -144,7 +144,6 @@ class FirebaseUtil {
 
 
     /* Can be called to figure out email of current user session
-    * @param[fname] Result of calling Firebase.auth.currentUser.uid
     */
     fun getCurrentUserEmail(): String {
         return Firebase.auth.currentUser?.email.toString()
