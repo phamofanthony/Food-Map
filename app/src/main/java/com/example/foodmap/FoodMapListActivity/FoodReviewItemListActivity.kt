@@ -119,11 +119,8 @@ class FoodReviewItemListActivity : AppCompatActivity() {
 
     private fun subscribeToRealtimeUpdates() {
         val db = FirebaseUtil()
-        db.connection.collection("Food Reviews")
-            .whereEqualTo(
-                "ownerID",
-                db.getCurrentUserEmail()
-            ) //Eventually, have call to get currUserEmail + implement following system
+        db.connection.collection("FoodReviews")
+            .whereEqualTo("ownerID", db.getCurrentUserEmail())
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w("MainActivity", "Listen failed.", e)
