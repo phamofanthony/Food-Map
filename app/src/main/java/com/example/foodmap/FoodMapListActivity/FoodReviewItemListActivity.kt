@@ -14,7 +14,6 @@ import androidx.activity.viewModels
 import com.example.foodmap.AddEditFoodReviewActivity.AddEditFoodReviewActivity
 import com.example.foodmap.R
 import com.example.foodmap.FoodMapApplication
-import com.example.foodmap.MapsActivity.MapsActivity
 import com.example.foodmap.Repository.FirebaseUtil
 import com.example.foodmap.Repository.FoodReviewItem
 import com.example.foodmap.UserSignUp.UserEntryActivity
@@ -100,7 +99,8 @@ class FoodReviewItemListActivity : AppCompatActivity() {
 
         val mapsActionBtn = findViewById<ImageButton>(R.id.mapBtn)
         mapsActionBtn.setOnClickListener {
-            startMapsActivity.launch(Intent(this, MapsActivity::class.java))
+            // TODO: Setup Maps Activity for this to launch to the correct one
+//            startMapsActivity.launch(Intent(this,AddEditFoodReviewActivity::class.java))
         }
 
         val friendsActionBtn = findViewById<ImageButton>(R.id.friendsBtn)
